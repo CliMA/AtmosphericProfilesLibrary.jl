@@ -24,6 +24,13 @@ z_profiles = [
     (; func = APL.Nieuwstadt_θ_liq_ice , kwargs = (;z_range, xlabel = "θ_liq_ice [K]")),
     (; func = APL.Nieuwstadt_u         , kwargs = (;z_range, xlabel = "u [m/s]")),
     (; func = APL.Nieuwstadt_tke       , kwargs = (;z_range, xlabel = "tke [m^2/s^2]")),
+    (; func = APL.Bomex_q_tot          , kwargs = (;z_range, xlabel = "q [1]")),
+    (; func = APL.Bomex_θ_liq_ice      , kwargs = (;z_range, xlabel = "θ_liq_ice [K]")),
+    (; func = APL.Bomex_u              , kwargs = (;z_range, xlabel = "u [m/s]")),
+    (; func = APL.Bomex_tke            , kwargs = (;z_range, xlabel = "tke [m^2/s^2]")),
+    # (; func = APL.Bomex_dTdt           , kwargs = (;z_range, xlabel = "dTdt [K/s]")), # depends on Π
+    (; func = APL.Bomex_dqtdt          , kwargs = (;z_range, xlabel = "dqtdt [kg/(kg s)]")),
+    (; func = APL.Bomex_subsidence     , kwargs = (;z_range, xlabel = "subsidence [m^2/s^2]")),
     (; func = APL.TRMM_LBA_p_in        , kwargs = (;z_range, xlabel = "p [kPa]")),
     (; func = APL.TRMM_LBA_T_in        , kwargs = (;z_range, xlabel = "T [K]")),
     (; func = APL.TRMM_LBA_RH_in       , kwargs = (;z_range, xlabel = "RH [%]")),
