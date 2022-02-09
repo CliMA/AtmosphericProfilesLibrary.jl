@@ -1,4 +1,4 @@
-""" :( """
+""" [Siebesma2003](@cite) """
 Bomex_θ_liq_ice(::Type{FT}) where {FT} = z -> if z <= 520.0
         FT(298.7)
     elseif z > 520.0 && z <= 1480.0
@@ -10,7 +10,7 @@ Bomex_θ_liq_ice(::Type{FT}) where {FT} = z -> if z <= 520.0
     else
         FT(0)
     end
-""" :( """
+""" [Siebesma2003](@cite) """
 Bomex_q_tot(::Type{FT}) where {FT} = z -> if z <= 520
         (FT(17.0) + z * (FT(16.3) - 17) / 520) / 1000
     elseif z > 520.0 && z <= 1480.0
@@ -20,13 +20,13 @@ Bomex_q_tot(::Type{FT}) where {FT} = z -> if z <= 520
     elseif z > 2000.0
         (FT(4.2) + (z - 2000) * (3 - FT(4.2)) / (3000 - 2000)) / 1000
     end
-""" :( """
+""" [Siebesma2003](@cite) """
 Bomex_u(::Type{FT}) where {FT} = z -> if z <= 700.0
         FT(-8.75)
     elseif z > 700.0
         FT(-8.75) + (z - 700) * (FT(-4.61) - FT(-8.75)) / (3000 - 700)
     end
-""" :( """
+""" [Siebesma2003](@cite) """
 Bomex_tke(::Type{FT}) where {FT} = z -> if (z <= 2500.0)
         FT(1) - z / 3000
     else
