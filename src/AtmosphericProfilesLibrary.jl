@@ -6,6 +6,7 @@ import Dierckx
 include("profiles/Soares.jl")
 include("profiles/Nieuwstadt.jl")
 include("profiles/Bomex.jl")
+include("profiles/LifeCycleTan2018.jl")
 include("profiles/TRMM_LBA.jl")
 include("profiles/Rico.jl")
 include("profiles/DryBubble.jl")

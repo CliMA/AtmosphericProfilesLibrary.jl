@@ -57,5 +57,9 @@ for (root, _, files) in Base.Filesystem.walkdir(pkgdir(AtmosphericProfilesLibrar
         if endswith(file, ".DS_Store")
             rm(file; force = true)
         end
+        occursin("build/", file) && continue
+        if endswith(file, ".png")
+            rm(file; force = true)
+        end
     end
 end
