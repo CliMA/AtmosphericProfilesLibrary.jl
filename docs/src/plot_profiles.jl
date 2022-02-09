@@ -17,20 +17,23 @@ tz_profiles = [
 ##### z profiles
 #####
 z_profiles = [
-    (; func = APL.Soares_q_tot        , kwargs = (;z_range, xlabel = "q_tot [1]")),
-    (; func = APL.Soares_θ_liq_ice    , kwargs = (;z_range, xlabel = "θ_liq_ice [K]")),
-    (; func = APL.Soares_u            , kwargs = (;z_range, xlabel = "u [m/s]")),
-    (; func = APL.Soares_tke          , kwargs = (;z_range, xlabel = "tke [m^2/s^2]")),
-    (; func = APL.TRMM_LBA_p_in       , kwargs = (;z_range, xlabel = "p [kPa]")),
-    (; func = APL.TRMM_LBA_T_in       , kwargs = (;z_range, xlabel = "T [K]")),
-    (; func = APL.TRMM_LBA_RH_in      , kwargs = (;z_range, xlabel = "RH [%]")),
-    (; func = APL.TRMM_LBA_u_in       , kwargs = (;z_range, xlabel = "u [m/s]")),
-    (; func = APL.TRMM_LBA_v_in       , kwargs = (;z_range, xlabel = "v [m/s]")),
-    (; func = APL.Rico_geostrophic_ug , kwargs = (;z_range, xlabel = "u [m/s]")),
-    (; func = APL.Rico_geostrophic_vg , kwargs = (;z_range, xlabel = "v [m/s]")),
-    (; func = APL.Rico_dqtdt          , kwargs = (;z_range, xlabel = "dqdt [?/s]")),
-    (; func = APL.Rico_subsidence     , kwargs = (;z_range, xlabel = "v [?/s]")),
-    (; func = APL.DryBubble_θ         , kwargs = (;z_range, xlabel = "θ_liq_ice [K]")),
+    (; func = APL.Soares_q_tot         , kwargs = (;z_range, xlabel = "q_tot [1]")),
+    (; func = APL.Soares_θ_liq_ice     , kwargs = (;z_range, xlabel = "θ_liq_ice [K]")),
+    (; func = APL.Soares_u             , kwargs = (;z_range, xlabel = "u [m/s]")),
+    (; func = APL.Soares_tke           , kwargs = (;z_range, xlabel = "tke [m^2/s^2]")),
+    (; func = APL.Nieuwstadt_θ_liq_ice , kwargs = (;z_range, xlabel = "θ_liq_ice [K]")),
+    (; func = APL.Nieuwstadt_u         , kwargs = (;z_range, xlabel = "u [m/s]")),
+    (; func = APL.Nieuwstadt_tke       , kwargs = (;z_range, xlabel = "tke [m^2/s^2]")),
+    (; func = APL.TRMM_LBA_p_in        , kwargs = (;z_range, xlabel = "p [kPa]")),
+    (; func = APL.TRMM_LBA_T_in        , kwargs = (;z_range, xlabel = "T [K]")),
+    (; func = APL.TRMM_LBA_RH_in       , kwargs = (;z_range, xlabel = "RH [%]")),
+    (; func = APL.TRMM_LBA_u_in        , kwargs = (;z_range, xlabel = "u [m/s]")),
+    (; func = APL.TRMM_LBA_v_in        , kwargs = (;z_range, xlabel = "v [m/s]")),
+    (; func = APL.Rico_geostrophic_ug  , kwargs = (;z_range, xlabel = "u [m/s]")),
+    (; func = APL.Rico_geostrophic_vg  , kwargs = (;z_range, xlabel = "v [m/s]")),
+    (; func = APL.Rico_dqtdt           , kwargs = (;z_range, xlabel = "dqdt [?/s]")),
+    (; func = APL.Rico_subsidence      , kwargs = (;z_range, xlabel = "v [?/s]")),
+    (; func = APL.DryBubble_θ          , kwargs = (;z_range, xlabel = "θ_liq_ice [K]")),
 ]
 
 #####
