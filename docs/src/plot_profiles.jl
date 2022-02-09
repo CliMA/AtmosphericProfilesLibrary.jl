@@ -67,6 +67,11 @@ z_profiles = [
     (; func = APL.TRMM_LBA_RH_in       , kwargs = (;z_range, xlabel = "RH")),
     (; func = APL.TRMM_LBA_u_in        , kwargs = (;z_range, xlabel = "u")),
     (; func = APL.TRMM_LBA_v_in        , kwargs = (;z_range, xlabel = "v")),
+
+    (; func = APL.ARM_SGP_θ_liq_ice    , kwargs = (;z_range, xlabel = "θ_liq_ice")),
+    (; func = APL.ARM_SGP_q_tot        , kwargs = (;z_range, xlabel = "q_tot")),
+    (; func = APL.ARM_SGP_tke          , kwargs = (;z_range, xlabel = "tke")),
+
     (; func = APL.DryBubble_θ          , kwargs = (;z_range, xlabel = "θ_liq_ice")),
 ]
 
