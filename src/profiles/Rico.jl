@@ -1,10 +1,10 @@
 """ [vanZanten2011](@cite) """
-function Rico_geostrophic_ug(::Type{FT}) where {FT}
+function Rico_u(::Type{FT}) where {FT}
     return z -> FT(-9.9) + FT(2.0e-3) * z
 end
 
 """ [vanZanten2011](@cite) """
-function Rico_geostrophic_vg(::Type{FT}) where {FT}
+function Rico_v(::Type{FT}) where {FT}
     return z -> FT(-3.8)
 end
 
@@ -25,6 +25,16 @@ Rico_q_tot(::Type{FT}) where {FT} =
     else
         (FT(2.4) + (FT(1.8) - FT(2.4)) / (4000 - 3260) * (z - 3260)) / 1000
     end
+
+""" [vanZanten2011](@cite) """
+function Rico_geostrophic_ug(::Type{FT}) where {FT}
+    return z -> FT(-9.9) + FT(2.0e-3) * z
+end
+
+""" [vanZanten2011](@cite) """
+function Rico_geostrophic_vg(::Type{FT}) where {FT}
+    return z -> FT(-3.8)
+end
 
 """ [vanZanten2011](@cite) """
 function Rico_dqtdt(::Type{FT}) where {FT}
