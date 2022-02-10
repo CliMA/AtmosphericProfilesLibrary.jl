@@ -71,6 +71,15 @@ function TRMM_LBA_v(::Type{FT}) where {FT}
 end
 
 """ [Grabowski2006](@cite) """
+function TRMM_LBA_tke(::Type{FT}) where {FT}
+    z -> if z <= 2500.0
+        FT(1) - z / 3000
+    else
+        FT(0)
+    end
+end
+
+""" [Grabowski2006](@cite) """
 function TRMM_LBA_radiation(::Type{FT}) where {FT}
     rad_time = range(FT(10), FT(360); length = 36) .* 60
     z_in = FT[42.5, 200.92, 456.28, 743, 1061.08, 1410.52, 1791.32, 2203.48, 2647,3121.88, 3628.12,
