@@ -11,6 +11,9 @@ function ARM_SGP_θ_liq_ice(::Type{FT}) where {FT}
     return profile
 end
 """ [Brown2002](@cite) """
+ARM_SGP_u(::Type{FT}) where {FT} = z -> FT(10)
+
+""" [Brown2002](@cite) """
 function ARM_SGP_q_tot(::Type{FT}) where {FT}
     z_in = ARM_SGP_z(FT)
     r_in = FT[15.2,15.17,14.98,14.8,14.7,13.5,3.0,3.0] ./ 1000 # qt should be in kg/kg
