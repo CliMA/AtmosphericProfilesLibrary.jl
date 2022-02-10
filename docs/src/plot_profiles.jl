@@ -53,6 +53,8 @@ z_profiles = [
     (; func = APL.LifeCycleTan2018_q_tot      , kwargs = (;z_range, xlabel = "q_tot")),
     (; func = APL.LifeCycleTan2018_u          , kwargs = (;z_range, xlabel = "u")),
     (; func = APL.LifeCycleTan2018_tke        , kwargs = (;z_range, xlabel = "tke")),
+    (; func = APL.LifeCycleTan2018_geostrophic_u, kwargs = (;z_range, xlabel = "u")),
+    (; func = APL.LifeCycleTan2018_geostrophic_v, kwargs = (;z_range, xlabel = "v")),
     # (; func = APL.LifeCycleTan2018_dTdt       , kwargs = (;z_range, xlabel = "dTdt")), # depends on Π
     (; func = APL.LifeCycleTan2018_dqtdt      , kwargs = (;z_range, xlabel = "dqtdt")),
     (; func = APL.LifeCycleTan2018_subsidence , kwargs = (;z_range, xlabel = "subsidence")),
