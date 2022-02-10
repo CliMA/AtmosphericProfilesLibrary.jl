@@ -65,14 +65,15 @@ z_profiles = [
     (; func = APL.Rico_q_tot           , kwargs = (;z_range, xlabel = "q_tot")),
     (; func = APL.Rico_geostrophic_ug  , kwargs = (;z_range, xlabel = "u")),
     (; func = APL.Rico_geostrophic_vg  , kwargs = (;z_range, xlabel = "v")),
+    # (; func = APL.Rico_dTdt            , kwargs = (;z_range, xlabel = "dTdt")), # depends on Π
     (; func = APL.Rico_dqtdt           , kwargs = (;z_range, xlabel = "dqtdt")),
     (; func = APL.Rico_subsidence      , kwargs = (;z_range, xlabel = "v")),
 
-    (; func = APL.TRMM_LBA_p_in        , kwargs = (;z_range, xlabel = "p")),
-    (; func = APL.TRMM_LBA_T_in        , kwargs = (;z_range, xlabel = "T")),
-    (; func = APL.TRMM_LBA_RH_in       , kwargs = (;z_range, xlabel = "RH")),
-    (; func = APL.TRMM_LBA_u_in        , kwargs = (;z_range, xlabel = "u")),
-    (; func = APL.TRMM_LBA_v_in        , kwargs = (;z_range, xlabel = "v")),
+    (; func = APL.TRMM_LBA_p           , kwargs = (;z_range, xlabel = "p")),
+    (; func = APL.TRMM_LBA_T           , kwargs = (;z_range, xlabel = "T")),
+    (; func = APL.TRMM_LBA_RH          , kwargs = (;z_range, xlabel = "RH")),
+    (; func = APL.TRMM_LBA_u           , kwargs = (;z_range, xlabel = "u")),
+    (; func = APL.TRMM_LBA_v           , kwargs = (;z_range, xlabel = "v")),
 
     (; func = APL.ARM_SGP_θ_liq_ice    , kwargs = (;z_range, xlabel = "θ_liq_ice")),
     (; func = APL.ARM_SGP_q_tot        , kwargs = (;z_range, xlabel = "q_tot")),

@@ -1,5 +1,5 @@
 """ [Grabowski2006](@cite) """
-function TRMM_LBA_z_in(::Type{FT}) where {FT}
+function TRMM_LBA_z(::Type{FT}) where {FT}
     z_in = FT[0.130,  0.464,  0.573,  1.100,  1.653,  2.216,  2.760,
               3.297,  3.824,  4.327,  4.787,  5.242,  5.686,  6.131,
               6.578,  6.996,  7.431,  7.881,  8.300,  8.718,  9.149,
@@ -10,8 +10,8 @@ function TRMM_LBA_z_in(::Type{FT}) where {FT}
     return z_in
 end
 """ [Grabowski2006](@cite) """
-function TRMM_LBA_p_in(::Type{FT}) where {FT}
-    z_in = TRMM_LBA_z_in(FT)
+function TRMM_LBA_p(::Type{FT}) where {FT}
+    z_in = TRMM_LBA_z(FT)
     p_in = FT[991.3, 954.2, 942.0, 886.9, 831.5, 778.9, 729.8,
               684.0, 641.7, 603.2, 570.1, 538.6, 509.1, 480.4,
               454.0, 429.6, 405.7, 382.5, 361.1, 340.9, 321.2,
@@ -22,8 +22,8 @@ function TRMM_LBA_p_in(::Type{FT}) where {FT}
     return Dierckx.Spline1D(z_in, p_in; k = 1)
 end
 """ [Grabowski2006](@cite) """
-function TRMM_LBA_T_in(::Type{FT}) where {FT}
-    z_in = TRMM_LBA_z_in(FT)
+function TRMM_LBA_T(::Type{FT}) where {FT}
+    z_in = TRMM_LBA_z(FT)
     T_in = FT[23.70,  23.30,  22.57,  19.90,  16.91,  14.09,  11.13,
                8.29,   5.38,   2.29,  -0.66,  -3.02,  -5.28,  -7.42,
              -10.34, -12.69, -15.70, -19.21, -21.81, -24.73, -27.76,
@@ -34,8 +34,8 @@ function TRMM_LBA_T_in(::Type{FT}) where {FT}
     return Dierckx.Spline1D(z_in, T_in; k = 1)
 end
 """ [Grabowski2006](@cite) """
-function TRMM_LBA_RH_in(::Type{FT}) where {FT}
-  z_in = TRMM_LBA_z_in(FT)
+function TRMM_LBA_RH(::Type{FT}) where {FT}
+  z_in = TRMM_LBA_z(FT)
     RH_in = FT[98.00,  86.00,  88.56,  87.44,  86.67,  83.67,  79.56,
                84.78,  84.78,  89.33,  94.33,  92.00,  85.22,  77.33,
                80.11,  66.11,  72.11,  72.67,  52.22,  54.67,  51.00,
@@ -46,8 +46,8 @@ function TRMM_LBA_RH_in(::Type{FT}) where {FT}
     return Dierckx.Spline1D(z_in, RH_in; k = 1)
 end
 """ [Grabowski2006](@cite) """
-function TRMM_LBA_u_in(::Type{FT}) where {FT}
-    z_in = TRMM_LBA_z_in(FT)
+function TRMM_LBA_u(::Type{FT}) where {FT}
+    z_in = TRMM_LBA_z(FT)
     u_in = FT[0.00,   0.81,   1.17,   3.44,   3.53,   3.88,   4.09,
               3.97,   1.22,   0.16,  -1.22,  -1.72,  -2.77,  -2.65,
              -0.64,  -0.07,  -1.90,  -2.70,  -2.99,  -3.66,  -5.05,
@@ -58,8 +58,8 @@ function TRMM_LBA_u_in(::Type{FT}) where {FT}
     return Dierckx.Spline1D(z_in, u_in; k = 1)
 end
 """ [Grabowski2006](@cite) """
-function TRMM_LBA_v_in(::Type{FT}) where {FT}
-    z_in = TRMM_LBA_z_in(FT)
+function TRMM_LBA_v(::Type{FT}) where {FT}
+    z_in = TRMM_LBA_z(FT)
     v_in = FT[-0.40,  -3.51,  -3.88,  -4.77,  -5.28,  -5.85,  -5.60,
               -2.67,  -1.47,   0.57,   0.89,  -0.08,   1.11,   2.15,
                3.12,   3.22,   3.34,   1.91,   1.15,   1.01,  -0.57,

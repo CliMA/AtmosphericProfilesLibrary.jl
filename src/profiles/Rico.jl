@@ -37,6 +37,11 @@ function Rico_geostrophic_vg(::Type{FT}) where {FT}
 end
 
 """ [vanZanten2011](@cite) """
+function Rico_dTdt(::Type{FT}) where {FT}
+    return (Π, z) -> (FT(-2.5) / (3600 * 24)) * Π
+end
+
+""" [vanZanten2011](@cite) """
 function Rico_dqtdt(::Type{FT}) where {FT}
     return z -> if z <= 2980.0
         (-1 + FT(1.3456) / FT(2980.0) * z) / FT(86400.0) / 1000   #kg/(kg * s)
