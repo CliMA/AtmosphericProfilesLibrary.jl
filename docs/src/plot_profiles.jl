@@ -57,6 +57,8 @@ z_profiles = [
     (; func = APL.LifeCycleTan2018_dqtdt      , kwargs = (;z_range, xlabel = "dqtdt")),
     (; func = APL.LifeCycleTan2018_subsidence , kwargs = (;z_range, xlabel = "subsidence")),
 
+    (; func = APL.Rico_u               , kwargs = (;z_range, xlabel = "u")),
+    (; func = APL.Rico_v               , kwargs = (;z_range, xlabel = "v")),
     (; func = APL.Rico_θ_liq_ice       , kwargs = (;z_range, xlabel = "θ_liq_ice")),
     (; func = APL.Rico_q_tot           , kwargs = (;z_range, xlabel = "q_tot")),
     (; func = APL.Rico_geostrophic_ug  , kwargs = (;z_range, xlabel = "u")),
