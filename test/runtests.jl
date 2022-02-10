@@ -9,6 +9,7 @@ iscallable(f) = !isempty(methods(f))
         name == :TRMM_LBA_z && continue # returns an array for other profiles
         name == :ARM_SGP_z && continue # returns an array for other profiles
         name == :GATE_III_z && continue # returns an array for other profiles
+        name == :ARM_SGP_time && continue # returns an array for other profiles
         name == :eval && continue
         name == :include && continue
         prof = getproperty(AtmosphericProfilesLibrary, name)

@@ -29,3 +29,42 @@ function ARM_SGP_tke(::Type{FT}) where {FT}
         FT(0)
     end
 end
+
+""" [Brown2002](@cite) """
+function ARM_SGP_time(::Type{FT}) where {FT}
+    t_in = FT[0.0, 3.0, 6.0, 9.0, 12.0, 14.5] .* 3600 #LES time is in sec
+    return t_in
+end
+
+""" [Brown2002](@cite) """
+function ARM_SGP_dTdt(::Type{FT}) where {FT}
+    t_in = ARM_SGP_time(FT)
+    # Advective forcing for theta [K/h] converted to [K/sec]
+    AT_in = FT[0.0, 0.0, 0.0, -0.08, -0.016, -0.016] ./ 3600
+    # Radiative forcing for theta [K/h] converted to [K/sec]
+    RT_in = FT[-0.125, 0.0, 0.0, 0.0, 0.0, -0.1] ./ 3600
+    dTdt_A = Dierckx.Spline1D(t_in, AT_in; k = 1)
+    dTdt_R = Dierckx.Spline1D(t_in, RT_in; k = 1)
+    return (t, z) -> if z <= 1000.0
+        dTdt_A(t)+dTdt_R(t)
+    elseif z > 1000.0 && z <= 2000.0
+        (dTdt_A(t)+dTdt_R(t)) * (1 - (z - 1000) / 1000)
+    else
+        FT(0)
+    end
+end
+
+""" [Brown2002](@cite) """
+function ARM_SGP_dqtdt(::Type{FT}) where {FT}
+    t_in = ARM_SGP_time(FT)
+    # Radiative forcing for qt converted to [kg/kg/sec]
+    Rqt_in = FT[0.08, 0.02, 0.04, -0.1, -0.16, -0.3] ./ 1000 ./ 3600
+    dqtdt = Dierckx.Spline1D(t_in, Rqt_in; k = 1)
+    return (Π, t, z) -> if z <= 1000.0
+        dqtdt(t) * Π
+    elseif z > 1000.0 && z <= 2000.0
+        dqtdt(t) * Π * (1 - (z - 1000) / 1000)
+    else
+        FT(0)
+    end
+end
