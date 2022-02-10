@@ -50,6 +50,15 @@ LifeCycleTan2018_dTdt(::Type{FT}) where {FT} =
         FT(-2 / (3600 * 24) + (z - 1500) * (0 - -2 / (3600 * 24)) / (3000 - 1500)) * Π
     end
 
+# geostrophic velocity profiles
+""" [Tan2018](@cite) """
+LifeCycleTan2018_geostrophic_u(::Type{FT}) where {FT} =
+    z -> -10 + FT(1.8e-3) * z
+
+""" [Tan2018](@cite) """
+LifeCycleTan2018_geostrophic_v(::Type{FT}) where {FT} =
+    z -> FT(0)
+
 # Large-scale drying
 """ [Tan2018](@cite) """
 LifeCycleTan2018_dqtdt(::Type{FT}) where {FT} =
