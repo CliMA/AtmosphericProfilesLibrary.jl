@@ -43,6 +43,8 @@ z_profiles = [
     (; func = APL.Bomex_θ_liq_ice      , kwargs = (;z_range, xlabel = "θ_liq_ice")),
     (; func = APL.Bomex_u              , kwargs = (;z_range, xlabel = "u")),
     (; func = APL.Bomex_tke            , kwargs = (;z_range, xlabel = "tke")),
+    (; func = APL.Bomex_geostrophic_u  , kwargs = (;z_range, xlabel = "u")),
+    (; func = APL.Bomex_geostrophic_v  , kwargs = (;z_range, xlabel = "v")),
     # (; func = APL.Bomex_dTdt           , kwargs = (;z_range, xlabel = "dTdt")), # depends on Π
     (; func = APL.Bomex_dqtdt          , kwargs = (;z_range, xlabel = "dqtdt")),
     (; func = APL.Bomex_subsidence     , kwargs = (;z_range, xlabel = "subsidence")),

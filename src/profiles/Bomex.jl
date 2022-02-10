@@ -33,7 +33,12 @@ Bomex_tke(::Type{FT}) where {FT} = z -> if (z <= 2500.0)
         FT(0)
     end
 
-# Large-scale cooling
+# Geostrophic velocity profiles
+""" :( """
+Bomex_geostrophic_u(::Type{FT}) where {FT} = z -> -10 + FT(1.8e-3) * z
+""" :( """
+Bomex_geostrophic_v(::Type{FT}) where {FT} = z -> FT(0)
+
 """ dTdt(Π, z) """
 Bomex_dTdt(::Type{FT}) where {FT} = (Π, z) -> if z <= 1500.0
         (-2 / (3600 * 24)) * Π
