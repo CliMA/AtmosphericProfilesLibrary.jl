@@ -11,6 +11,7 @@ include("profiles/Rico.jl")
 include("profiles/TRMM_LBA.jl")
 include("profiles/ARM_SGP.jl")
 include("profiles/GATE_III.jl")
+include("profiles/GABLS.jl")
 include("profiles/DryBubble.jl")
 
 end # module
