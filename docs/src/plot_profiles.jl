@@ -79,6 +79,14 @@ z_profiles = [
     (; func = APL.GATE_III_T           , kwargs = (;z_range, xlabel = "T")),
     (; func = APL.GATE_III_tke         , kwargs = (;z_range, xlabel = "tke")),
 
+    (; func = APL.GABLS_u              , kwargs = (;z_range, xlabel = "u")),
+    (; func = APL.GABLS_v              , kwargs = (;z_range, xlabel = "v")),
+    (; func = APL.GABLS_θ_liq_ice      , kwargs = (;z_range, xlabel = "θ_liq_ice")),
+    (; func = APL.GABLS_q_tot          , kwargs = (;z_range, xlabel = "q_tot")),
+    (; func = APL.GABLS_tke            , kwargs = (;z_range, xlabel = "tke")),
+    (; func = APL.GABLS_geostrophic_ug , kwargs = (;z_range, xlabel = "u")),
+    (; func = APL.GABLS_geostrophic_vg , kwargs = (;z_range, xlabel = "v")),
+
     (; func = APL.DryBubble_θ          , kwargs = (;z_range, xlabel = "θ_liq_ice")),
 ]
 
