@@ -8,6 +8,8 @@ function units(var::String)
     var == "q_tot" && return "[kg/kg]"
     var == "u" && return "[m/s]"
     var == "v" && return "[m/s]"
+    var == "u0" && return "[m/s]"
+    var == "v0" && return "[m/s]"
     var == "tke" && return "[m^2/s^2]"
     var == "dTdt" && return "[K/s]"
     var == "dqtdt" && return "[kg/(kg s)]"
@@ -99,6 +101,21 @@ z_profiles = [
     (; func = APL.GABLS_geostrophic_vg , kwargs = (;z_range, xlabel = "v")),
 
     (; func = APL.DryBubble_θ          , kwargs = (;z_range, xlabel = "θ_liq_ice")),
+
+    (; func = APL.Dycoms_RF01_θ_liq_ice  , kwargs = (;z_range, xlabel = "θ_liq_ice")),
+    (; func = APL.Dycoms_RF01_q_tot      , kwargs = (;z_range, xlabel = "q_tot")),
+    (; func = APL.Dycoms_RF01_u0         , kwargs = (;z_range, xlabel = "u0")),
+    (; func = APL.Dycoms_RF01_v0         , kwargs = (;z_range, xlabel = "v0")),
+    (; func = APL.Dycoms_RF01_tke        , kwargs = (;z_range, xlabel = "tke")),
+
+    (; func = APL.Dycoms_RF02_θ_liq_ice  , kwargs = (;z_range, xlabel = "θ_liq_ice")),
+    (; func = APL.Dycoms_RF02_q_tot      , kwargs = (;z_range, xlabel = "q_tot")),
+    (; func = APL.Dycoms_RF02_u0         , kwargs = (;z_range, xlabel = "u0")),
+    (; func = APL.Dycoms_RF02_v0         , kwargs = (;z_range, xlabel = "v0")),
+    (; func = APL.Dycoms_RF02_u          , kwargs = (;z_range, xlabel = "u")),
+    (; func = APL.Dycoms_RF02_v          , kwargs = (;z_range, xlabel = "v")),
+    (; func = APL.Dycoms_RF02_tke        , kwargs = (;z_range, xlabel = "tke")),
+
 ]
 
 #####
