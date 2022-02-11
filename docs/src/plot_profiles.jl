@@ -100,7 +100,7 @@ z_profiles = [
     (; func = APL.GABLS_geostrophic_ug , kwargs = (;z_range, xlabel = "u")),
     (; func = APL.GABLS_geostrophic_vg , kwargs = (;z_range, xlabel = "v")),
 
-    (; func = APL.DryBubble_θ          , kwargs = (;z_range, xlabel = "θ_liq_ice")),
+    (; func = APL.DryBubble_θ_liq_ice    , kwargs = (;z_range, xlabel = "θ_liq_ice")),
 
     (; func = APL.Dycoms_RF01_θ_liq_ice  , kwargs = (;z_range, xlabel = "θ_liq_ice")),
     (; func = APL.Dycoms_RF01_q_tot      , kwargs = (;z_range, xlabel = "q_tot")),
