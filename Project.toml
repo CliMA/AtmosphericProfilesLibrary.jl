@@ -1,6 +1,6 @@
 name = "AtmosphericProfilesLibrary"
 uuid = "86bc3604-9858-485a-bdbe-831ec50de11d"
-authors = ["Charles Kawczynski <kawczynski.charles@gmail.com>"]
+authors = ["Climate Modeling Alliance"]
 version = "0.1.0"
 
 [deps]
