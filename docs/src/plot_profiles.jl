@@ -103,8 +103,6 @@ z_profiles = [
 
     (; func = APL.Dycoms_RF02_θ_liq_ice  , kwargs = (;z_range = zr_lo, xlabel = "θ_liq_ice")),
     (; func = APL.Dycoms_RF02_q_tot      , kwargs = (;z_range = zr_lo, xlabel = "q_tot")),
-    (; func = APL.Dycoms_RF02_u0         , kwargs = (;z_range = zr_lo, xlabel = "u0")),
-    (; func = APL.Dycoms_RF02_v0         , kwargs = (;z_range = zr_lo, xlabel = "v0")),
     (; func = APL.Dycoms_RF02_u          , kwargs = (;z_range = zr_lo, xlabel = "u")),
     (; func = APL.Dycoms_RF02_v          , kwargs = (;z_range = zr_lo, xlabel = "v")),
     (; func = APL.Dycoms_RF02_tke        , kwargs = (;z_range = zr_lo, xlabel = "tke")),
