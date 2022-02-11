@@ -1,5 +1,5 @@
 """ :( """
-function DryBubble_θ(::Type{FT}) where {FT}
+function DryBubble_θ_liq_ice(::Type{FT}) where {FT}
     z_in = FT[
           25.,   75.,  125.,  175.,  225.,  275.,  325.,  375.,  425.,
          475.,  525.,  575.,  625.,  675.,  725.,  775.,  825.,  875.,
