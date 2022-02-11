@@ -1,5 +1,7 @@
 """ [Khairoutdinov2009](@cite) """
 function GATE_III_z(::Type{FT}) where {FT}
+    # TODO: should the last element in here be 22, not 27, km?
+    # TODO: unify with GATE_III_z_in
     z_in = FT[ 0.0,   0.5,  1.0,  1.5,  2.0,   2.5,    3.0,   3.5,   4.0,   4.5,   5.0,  5.5,  6.0,  6.5,
                7.0, 7.5, 8.0,  8.5,   9.0,   9.5, 10.0,   10.5,   11.0, 11.5, 12.0, 12.5, 13.0, 13.5, 14.0,
                14.5, 15.0, 15.5, 16.0, 16.5, 17.0, 17.5, 18.0, 27.0] .* 1000 #z is in meters
@@ -45,4 +47,57 @@ function GATE_III_tke(::Type{FT}) where {FT}
         else
             FT(0)
         end
+end
+
+#=
+
+Unused data:
+
+u_in = FT[-1, -1.75, -2.5, -3.6,  -6.0, -8.75, -11.75,
+          -12.9, -13.1, -12.1, -11.0,  -8.5,  -5.0, -2.6,
+          0.0, 0.5, 0.4, 0.3, 0.0, -1.0, -3.0, -3.5, -4.5,
+          -4.6, -5.0, -3.5, -2.0, -1.0, -1.0, -1.0, -1.5,
+          -2.0, -2.5, -2.6, -2.7, -3.0, -3.0]
+=#
+""" [Khairoutdinov2009](@cite) """
+function GATE_III_z_in(::Type{FT}) where {FT}
+    #LES z is in meters
+    z_in = FT[ 0.0,  0.5,  1.0,  1.5,  2.0,  2.5,  3.0,  3.5,  4.0,  4.5, 5.0,  5.5,   6.0,
+               6.5,  7.0,  7.5,  8.0,  8.5,  9.0,  9.5, 10.0, 10.5, 11.0, 11.5, 12.0, 12.5,
+              13.0, 13.5, 14.0, 14.5, 15.0, 15.5, 16.0, 16.5, 17.0, 17.5, 18.0] .* 1000.0
+    return z_in
+end
+
+""" [Khairoutdinov2009](@cite) """
+function GATE_III_dqtdt(::Type{FT}) where {FT}
+    z_in = GATE_III_z_in(FT)
+    # Advective qt forcing  for theta [g/kg/d] converted to [kg/kg/sec]
+    r_tend_in = FT[ 0.0,   1.2,  2.0,  2.3,   2.2,   2.1,    1.9,   1.7,   1.5,  1.35,  1.22,  1.08,  0.95,
+                   0.82,  0.7,  0.6,   0.5,  0.4,   0.3,  0.2,   0.1,  0.05, 0.0025, 0.0012, 0.0006,  0.0,
+                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0] ./ (24 * 3600) ./ 1000
+
+    Qtend_in = r_tend_in ./ (1 .+ r_tend_in) # convert mixing ratio to specific humidity
+    profile = Dierckx.Spline1D(z_in, Qtend_in; k = 1)
+    return profile
+end
+
+""" [Khairoutdinov2009](@cite) """
+function GATE_III_dTdt(::Type{FT}) where {FT}
+    z_in = GATE_III_z_in(FT)
+    # Radiative forcing for T [K/d] converted to [K/sec]
+    RAD_in = FT[-2.9,  -1.1, -0.8, -1.1, -1.25, -1.35,   -1.4,  -1.4, -1.44, -1.52,  -1.6, -1.54, -1.49,
+               -1.43, -1.36, -1.3, -1.25, -1.2, -1.15, -1.1, -1.05,  -1.0,  -0.95,   -0.9,  -0.85, -0.8,
+               -0.75, -0.7, -0.6, -0.3,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0] ./ (24 * 3600)
+    # Advective qt forcing  for theta [g/kg/d] converted to [kg/kg/sec]
+    r_tend_in = FT[ 0.0,   1.2,  2.0,  2.3,   2.2,   2.1,    1.9,   1.7,   1.5,  1.35,  1.22,  1.08,  0.95,
+                   0.82,  0.7,  0.6,   0.5,  0.4,   0.3,  0.2,   0.1,  0.05, 0.0025, 0.0012, 0.0006,  0.0,
+                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0] ./ (24 * 3600) ./ 1000
+    # Radiative T forcing [K/d] converted to [K/sec]
+    Ttend_in = FT[ 0.0,  -1.0, -2.2, -3.0,  -3.5,  -3.8,   -4.0,  -4.1,  -4.2,  -4.2,  -4.1,  -4.0, -3.85,
+                  -3.7, -3.5, -3.25, -3.0, -2.8,  -2.5, -2.1,  -1.7,  -1.3,   -1.0,   -0.7,   -0.5, -0.4,
+                  -0.3, -0.2, -0.1,-0.05,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0] ./ (24*3600)
+
+    profile_T = Dierckx.Spline1D(z_in, Ttend_in; k = 1)
+    profile_R = Dierckx.Spline1D(z_in, RAD_in; k = 1)
+    return z -> profile_T(z) + profile_R(z)
 end

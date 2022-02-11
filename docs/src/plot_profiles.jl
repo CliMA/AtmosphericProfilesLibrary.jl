@@ -87,6 +87,8 @@ z_profiles = [
     (; func = APL.GATE_III_u           , kwargs = (;z_range, xlabel = "u")),
     (; func = APL.GATE_III_T           , kwargs = (;z_range, xlabel = "T")),
     (; func = APL.GATE_III_tke         , kwargs = (;z_range, xlabel = "tke")),
+    (; func = APL.GATE_III_dqtdt       , kwargs = (;z_range, xlabel = "dqtdt")),
+    (; func = APL.GATE_III_dTdt        , kwargs = (;z_range, xlabel = "dTdt")),
 
     (; func = APL.GABLS_u              , kwargs = (;z_range, xlabel = "u")),
     (; func = APL.GABLS_v              , kwargs = (;z_range, xlabel = "v")),
