@@ -18,6 +18,7 @@ function save_tz_profile(
         scale_time = scale_time_to_hours,
         scale_z = scale_z_to_kilometers,
         units = "",
+        label = "",
         t_range,
         z_range,
     )
@@ -32,7 +33,7 @@ function save_tz_profile(
     Plots.contourf(scale_time.(t_range), scale_z.(z_range), data; c = :viridis)
     Plots.xlabel!(xlabel(scale_time))
     Plots.ylabel!(ylabel(scale_z))
-    Plots.title!("$(nameof(profile)) $units")
+    Plots.title!("$(nameof(profile)) $units, ($label)")
     Plots.savefig("tz_$(nameof(profile)).png")
 end
 

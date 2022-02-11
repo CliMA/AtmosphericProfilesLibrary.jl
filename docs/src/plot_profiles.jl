@@ -25,7 +25,8 @@ const t_range = range(0, stop = 4e4, length = 100);
 ##### z-t profiles
 #####
 tz_profiles = [
-    (; func = APL.TRMM_LBA_radiation, kwargs = (; z_range, t_range)),
+    (; func = APL.TRMM_LBA_radiation, kwargs = (; z_range, t_range, label = "radiation")),
+    (; func = APL.ARM_SGP_dTdt      , kwargs = (;z_range, t_range, label = "dTdt", units = "[K/s]")),
 ]
 
 #####
@@ -45,7 +46,7 @@ z_profiles = [
     (; func = APL.Bomex_tke            , kwargs = (;z_range, xlabel = "tke")),
     (; func = APL.Bomex_geostrophic_u  , kwargs = (;z_range, xlabel = "u")),
     (; func = APL.Bomex_geostrophic_v  , kwargs = (;z_range, xlabel = "v")),
-    # (; func = APL.Bomex_dTdt           , kwargs = (;z_range, xlabel = "dTdt")), # depends on Π
+    # (; func = APL.Bomex_dTdt           , kwargs = (;z_range, xlabel = "dTdt")), # Callable by (Π, z)
     (; func = APL.Bomex_dqtdt          , kwargs = (;z_range, xlabel = "dqtdt")),
     (; func = APL.Bomex_subsidence     , kwargs = (;z_range, xlabel = "subsidence")),
 
@@ -55,7 +56,7 @@ z_profiles = [
     (; func = APL.LifeCycleTan2018_tke        , kwargs = (;z_range, xlabel = "tke")),
     (; func = APL.LifeCycleTan2018_geostrophic_u, kwargs = (;z_range, xlabel = "u")),
     (; func = APL.LifeCycleTan2018_geostrophic_v, kwargs = (;z_range, xlabel = "v")),
-    # (; func = APL.LifeCycleTan2018_dTdt       , kwargs = (;z_range, xlabel = "dTdt")), # depends on Π
+    # (; func = APL.LifeCycleTan2018_dTdt       , kwargs = (;z_range, xlabel = "dTdt")), # callable by (Π, z)
     (; func = APL.LifeCycleTan2018_dqtdt      , kwargs = (;z_range, xlabel = "dqtdt")),
     (; func = APL.LifeCycleTan2018_subsidence , kwargs = (;z_range, xlabel = "subsidence")),
 
@@ -65,7 +66,7 @@ z_profiles = [
     (; func = APL.Rico_q_tot           , kwargs = (;z_range, xlabel = "q_tot")),
     (; func = APL.Rico_geostrophic_ug  , kwargs = (;z_range, xlabel = "u")),
     (; func = APL.Rico_geostrophic_vg  , kwargs = (;z_range, xlabel = "v")),
-    # (; func = APL.Rico_dTdt            , kwargs = (;z_range, xlabel = "dTdt")), # depends on Π
+    # (; func = APL.Rico_dTdt            , kwargs = (;z_range, xlabel = "dTdt")), # callable by (Π, z)
     (; func = APL.Rico_dqtdt           , kwargs = (;z_range, xlabel = "dqtdt")),
     (; func = APL.Rico_subsidence      , kwargs = (;z_range, xlabel = "v")),
 
@@ -80,6 +81,7 @@ z_profiles = [
     (; func = APL.ARM_SGP_θ_liq_ice    , kwargs = (;z_range, xlabel = "θ_liq_ice")),
     (; func = APL.ARM_SGP_q_tot        , kwargs = (;z_range, xlabel = "q_tot")),
     (; func = APL.ARM_SGP_tke          , kwargs = (;z_range, xlabel = "tke")),
+    # (; func = APL.ARM_SGP_dqtdt        , kwargs = (;z_range, xlabel = "dqdt")), # callable by `(Π, t, z)`
 
     (; func = APL.GATE_III_q_tot       , kwargs = (;z_range, xlabel = "q_tot")),
     (; func = APL.GATE_III_u           , kwargs = (;z_range, xlabel = "u")),
