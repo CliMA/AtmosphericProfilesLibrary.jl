@@ -15,6 +15,8 @@ function units(var::String)
     var == "tke" && return "[m^2/s^2]"
     var == "dTdt" && return "[K/s]"
     var == "dqtdt" && return "[kg/(kg s)]"
+    var == "area" && return "[1]"
+    var == "w" && return "[m/s]"
     var == "RH" && return "[%?]"
     var == "subsidence" && return "[?]"
     error("No units found for variable $var")
@@ -123,6 +125,10 @@ z_profiles = [
     (; func = APL.SP_geostrophic_v     , kwargs = (;z_range = zr_lo, xlabel = "vg")),
 
     (; func = APL.DryBubble_θ_liq_ice    , kwargs = (;z_range = zr_lo, xlabel = "θ_liq_ice")),
+    (; func = APL.DryBubble_updrafts_θ_liq_ice , kwargs = (;z_range = zr_lo, xlabel = "θ_liq_ice")),
+    (; func = APL.DryBubble_updrafts_area      , kwargs = (;z_range = zr_lo, xlabel = "area")),
+    (; func = APL.DryBubble_updrafts_w         , kwargs = (;z_range = zr_lo, xlabel = "w")),
+    (; func = APL.DryBubble_updrafts_T         , kwargs = (;z_range = zr_lo, xlabel = "T")),
 
 
 ]
