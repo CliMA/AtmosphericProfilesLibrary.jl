@@ -12,6 +12,8 @@ function units(var::String)
     var == "vg" && return "[m/s]"
     var == "u0" && return "[m/s]"
     var == "v0" && return "[m/s]"
+    var == "shf" && return "[W/m^2]"
+    var == "lhf" && return "[W/m^2]"
     var == "tke" && return "[m^2/s^2]"
     var == "dTdt" && return "[K/s]"
     var == "dqtdt" && return "[kg/(kg s)]"
@@ -26,7 +28,7 @@ include("define_save_plots.jl")
 
 const zr_hi = range(0, stop = 2.5e4, length = 100);
 const zr_lo = range(0, stop = 4000.0, length = 100);
-const t_range = range(0, stop = 4e4, length = 100);
+const t_range = range(0, stop = 3600*15, length = 200);
 
 #####
 ##### z-t profiles
@@ -136,12 +138,15 @@ z_profiles = [
 #####
 ##### t profiles
 #####
-t_profiles = []
+t_profiles = [
+    (; func = APL.ARM_SGP_shf         , kwargs = (;t_range, label = "shf")),
+    (; func = APL.ARM_SGP_lhf         , kwargs = (;t_range, label = "lhf")),
+]
 
 for profile in t_profiles
     # We don't have t-profiles yet.
     # @info "Saving t-profile $(nameof(profile.func))" # for debugging
-    # save_t_profile(profile.func; profile.kwargs...)
+    save_t_profile(profile.func; profile.kwargs...)
 end
 for profile in tz_profiles
     # @info "Saving tz-profile $(nameof(profile.func))" # for debugging
