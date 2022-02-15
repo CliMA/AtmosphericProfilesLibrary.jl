@@ -68,3 +68,19 @@ function ARM_SGP_dqtdt(::Type{FT}) where {FT}
         FT(0)
     end
 end
+
+""" [Brown2002](@cite) """
+function ARM_SGP_shf(::Type{FT}) where {FT}
+    t_Sur_in = FT[0.0, 4.0, 6.5, 7.5, 10.0, 12.5, 14.5] .* 3600 #LES time is in sec
+    shf = FT[-30.0, 90.0, 140.0, 140.0, 100.0, -10, -10] # W/m^2
+    profile = Dierckx.Spline1D(t_Sur_in, shf; k = 1)
+    return profile
+end
+
+""" [Brown2002](@cite) """
+function ARM_SGP_lhf(::Type{FT}) where {FT}
+    t_Sur_in = FT[0.0, 4.0, 6.5, 7.5, 10.0, 12.5, 14.5] .* 3600 #LES time is in sec
+    lhf = FT[5.0, 250.0, 450.0, 500.0, 420.0, 180.0, 0.0] # W/m^2
+    profile = Dierckx.Spline1D(t_Sur_in, lhf; k = 1)
+    return profile
+end

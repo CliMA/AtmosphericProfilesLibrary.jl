@@ -52,3 +52,19 @@ function save_z_profile(
     Plots.title!("$(nameof(profile))")
     Plots.savefig("z_$(nameof(profile)).png")
 end
+
+function save_t_profile(
+        profile;
+        label,
+        scale_time = scale_time_to_hours,
+        t_range,
+    )
+    prof = profile(Float64)
+    # data = (t) -> prof(t)
+    data = prof.(t_range)
+    Plots.plot(scale_time.(t_range), data)
+    Plots.xlabel!("Time $(xlabel(scale_time))")
+    Plots.ylabel!("$label $(units(label))")
+    Plots.title!("$(nameof(profile))")
+    Plots.savefig("t_$(nameof(profile)).png")
+end
