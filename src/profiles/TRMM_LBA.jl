@@ -103,7 +103,8 @@ function TRMM_LBA_tke_prescribed(::Type{FT}) where {FT}
        1.7938 , 1.56451, 1.37531, 1.17515, 0.96797, 0.61262, 0.26423,
        0.14929, 0.07465, 0.00635, 0.     , 0.     , 0.     , 0.     ,
        0.     , 0.     , 0.     , 0.     , 0.     ]
-    return Dierckx.Spline1D(z_in, tke_in; k = 1)
+    not_type_stable_spline = Dierckx.Spline1D(z_in, tke_in; k = 1)
+    return x -> FT(not_type_stable_spline(x))
 end
 
 

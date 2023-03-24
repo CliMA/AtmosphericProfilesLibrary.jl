@@ -46,5 +46,6 @@ function Soares_tke_prescribed(::Type{FT}) where {FT}
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    return Dierckx.Spline1D(z_in, tke_in; k = 1)
+    not_type_stable_spline = Dierckx.Spline1D(z_in, tke_in; k = 1)
+    return x -> FT(not_type_stable_spline(x))
 end
