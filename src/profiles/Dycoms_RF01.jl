@@ -30,6 +30,7 @@ function Dycoms_RF01_tke_prescribed(::Type{FT}) where {FT}
               775.0, 825.0, 875.0, 925.0, 975.0, 1025.0, 1075.0, 1125.0, 1175.0, 1225.0, 1275.0, 1325.0, 1375.0, 1425.0, 1475.0]
     tke_in = FT[0.2726, 0.5479, 0.6597, 0.7079, 0.7285, 0.7343, 0.7319, 0.7252, 0.7166, 0.7064, 0.6887, 0.6317,
                 0.6362, 0.6266, 0.5832, 0.4633, 0.0504, 0.0001, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    return Dierckx.Spline1D(z_in, tke_in; k = 1)
+    not_type_stable_spline = Dierckx.Spline1D(z_in, tke_in; k = 1)
+    return x -> FT(not_type_stable_spline(x))
 end
 
