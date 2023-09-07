@@ -1,3 +1,5 @@
+import LinearAlgebra
+
 """ [Grabowski2006](@cite) """
 function TRMM_LBA_z(::Type{FT}) where {FT}
     z_in = FT[0.130,  0.464,  0.573,  1.100,  1.653,  2.216,  2.760,
@@ -222,9 +224,11 @@ function TRMM_LBA_radiation(::Type{FT}) where {FT}
                0.319,  0.201,  0.343,  0.148,      0,      0,      0,      0,      0],
              FT[-0.344,  -0.75, -0.856, -0.757, -0.607, -0.409,  -0.25, -0.156, -0.033,  0.076,  0.143,  0.246,
                0.316,  0.287,  0.293,  0.361,  0.345,  0.225,  0.082,  0.035,  0.071,  0.046,  0.172,  0.708,
-               0.255,   0.21,  0.325,  0.146,      0,      0,      0,      0,      0]] ./ 86400
+               0.255,   0.21,  0.325,  0.146,      0,      0,      0,      0,      0]]
 
-    rad_in = hcat(rad_in...)'
+    rad_in = reduce(hcat, rad_in)::Matrix{FT}
+    rad_in .= rad_in ./ 86400
+    rad_in = (rad_in')::LinearAlgebra.Adjoint{FT, Matrix{FT}}
     profile = Dierckx.Spline2D(rad_time, z_in, rad_in; kx = 1, ky = 1)
     return profile
 end
