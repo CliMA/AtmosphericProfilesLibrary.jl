@@ -16,5 +16,6 @@ include("profiles/Dycoms_RF02.jl")
 include("profiles/GABLS.jl")
 include("profiles/SP.jl")
 include("profiles/DryBubble.jl")
+include("profiles/ISDAC.jl")
 
 end # module
