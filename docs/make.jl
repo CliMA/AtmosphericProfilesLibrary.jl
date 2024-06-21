@@ -31,9 +31,8 @@ format = Documenter.HTML(
 #! format: on
 
 makedocs(
-    bib,
+    plugins = [bib],
     sitename = "AtmosphericProfilesLibrary.jl",
-    strict = true,
     format = format,
     checkdocs = :exports,
     clean = true,

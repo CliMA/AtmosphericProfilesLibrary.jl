@@ -143,7 +143,14 @@ z_profiles = [
     (; func = APL.DryBubble_updrafts_w         , kwargs = (;z_range = zr_lo, xlabel = "w")),
     (; func = APL.DryBubble_updrafts_T         , kwargs = (;z_range = zr_lo, xlabel = "T")),
 
-
+    (; func = APL.ISDAC_θ_liq_ice       , kwargs = (;z_range = zr_lo, xlabel = "θ_liq_ice")),
+    (; func = APL.ISDAC_q_tot           , kwargs = (;z_range = zr_lo, xlabel = "q_tot")),
+    (; func = APL.ISDAC_u               , kwargs = (;z_range = zr_lo, xlabel = "u")),
+    (; func = APL.ISDAC_v               , kwargs = (;z_range = zr_lo, xlabel = "v")),
+    (; func = APL.ISDAC_tke             , kwargs = (;z_range = zr_lo, xlabel = "tke")),
+    (; func = APL.ISDAC_subsidence      , kwargs = (;z_range = zr_lo, xlabel = "subsidence", unit = "[m/s]")),
+    (; func = APL.ISDAC_inv_τ_scalar    , kwargs = (;z_range = zr_lo, xlabel = "inv_τ_scalar", unit = "[1/s]")),
+    (; func = APL.ISDAC_inv_τ_wind      , kwargs = (;z_range = zr_lo, xlabel = "inv_τ_wind", unit = "[1/s]")),
 ]
 
 #####
