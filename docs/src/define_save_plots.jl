@@ -42,12 +42,14 @@ function save_z_profile(
         xlabel,
         scale_z = scale_z_to_kilometers,
         z_range,
+        unit = nothing,
     )
     prof = profile(Float64)
     # data = (z) -> prof(z)
     data = prof.(z_range)
     Plots.plot(data, scale_z.(z_range))
-    Plots.xlabel!("$xlabel $(units(xlabel))")
+    unit = @something unit units(xlabel)
+    Plots.xlabel!("$xlabel $unit")
     Plots.ylabel!(ylabel(scale_z))
     Plots.title!("$(nameof(profile))")
     Plots.savefig("z_$(nameof(profile)).png")
