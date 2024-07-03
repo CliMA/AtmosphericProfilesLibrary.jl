@@ -14,7 +14,7 @@ This repository is meant to serve as a library of static functions in efforts to
    - `prof = z->2*z` callable by `prof(z)`
    - `prof = t->2*t` callable by `prof(t)`
    - `prof = (t,z) -> z*t` callable by `prof(t, z)`
-   - `prof = Dierckx.Spline1D(FT[0, 1, 2], FT[0, 2, 4]; k = 1)` callable by `prof(z)`
+   - `prof = Interpolations.interpolate(FT[0, 1, 2], FT[0, 2, 4])` callable by `prof(z)`
 
 ## How to contribute
 

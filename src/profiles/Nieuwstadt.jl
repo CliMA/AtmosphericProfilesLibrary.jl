@@ -51,6 +51,6 @@ function Nieuwstadt_tke_prescribed(::Type{FT}) where {FT}
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    not_type_stable_spline = Dierckx.Spline1D(z_in, tke_in; k = 1)
+    not_type_stable_spline = Intp.interpolate((z_in, ), tke_in, Intp.Gridded(Intp.Linear()))
     return ZProfile(x -> FT(not_type_stable_spline(x)))
 end

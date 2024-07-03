@@ -7,7 +7,7 @@ end
 function ARM_SGP_θ_liq_ice(::Type{FT}) where {FT}
     z_in = ARM_SGP_z(FT)
     θ_liq_ice_in = FT[299.0, 301.5, 302.5, 303.53, 303.7, 307.13, 314.0, 343.2] # K
-    profile = Dierckx.Spline1D(z_in, θ_liq_ice_in; k = 1)
+    profile = Intp.interpolate((z_in, ), θ_liq_ice_in, Intp.Gridded(Intp.Linear()))
     return ZProfile(profile)
 end
 """ [Brown2002](@cite) """
@@ -18,7 +18,7 @@ function ARM_SGP_q_tot(::Type{FT}) where {FT}
     z_in = ARM_SGP_z(FT)
     r_in = FT[15.2,15.17,14.98,14.8,14.7,13.5,3.0,3.0] ./ 1000 # qt should be in kg/kg
     q_tot_in = r_in ./ (1 .+ r_in)
-    profile = Dierckx.Spline1D(z_in, q_tot_in; k = 1)
+    profile = Intp.interpolate((z_in, ), q_tot_in, Intp.Gridded(Intp.Linear()))
     return ZProfile(profile)
 end
 """ [Brown2002](@cite) """
@@ -49,7 +49,7 @@ function ARM_SGP_tke_prescribed(::Type{FT}) where {FT}
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    not_type_stable_spline = Dierckx.Spline1D(z_in, tke_in; k = 1)
+    not_type_stable_spline = Intp.interpolate((z_in, ), tke_in, Intp.Gridded(Intp.Linear()))
     return ZProfile(x -> FT(not_type_stable_spline(x)))
 end
 
@@ -66,8 +66,8 @@ function ARM_SGP_dTdt(::Type{FT}) where {FT}
     AT_in = FT[0.0, 0.0, 0.0, -0.08, -0.016, -0.016] ./ 3600
     # Radiative forcing for theta [K/h] converted to [K/sec]
     RT_in = FT[-0.125, 0.0, 0.0, 0.0, 0.0, -0.1] ./ 3600
-    dTdt_A = Dierckx.Spline1D(t_in, AT_in; k = 1)
-    dTdt_R = Dierckx.Spline1D(t_in, RT_in; k = 1)
+    dTdt_A = Intp.interpolate((t_in, ), AT_in, Intp.Gridded(Intp.Linear()))
+    dTdt_R = Intp.interpolate((t_in, ), RT_in, Intp.Gridded(Intp.Linear()))
     prof = (t, z) -> if z <= 1000.0
         FT(dTdt_A(t)+dTdt_R(t))
     elseif z > 1000.0 && z <= 2000.0
@@ -83,7 +83,7 @@ function ARM_SGP_dqtdt(::Type{FT}) where {FT}
     t_in = ARM_SGP_time(FT)
     # Radiative forcing for qt converted to [kg/kg/sec]
     Rqt_in = FT[0.08, 0.02, 0.04, -0.1, -0.16, -0.3] ./ 1000 ./ 3600
-    dqtdt = Dierckx.Spline1D(t_in, Rqt_in; k = 1)
+    dqtdt = Intp.interpolate((t_in, ), Rqt_in, Intp.Gridded(Intp.Linear()))
     prof = (Π, t, z) -> if z <= 1000.0
         FT(dqtdt(t) * Π)
     elseif z > 1000.0 && z <= 2000.0
@@ -98,7 +98,7 @@ end
 function ARM_SGP_shf(::Type{FT}) where {FT}
     t_Sur_in = FT[0.0, 4.0, 6.5, 7.5, 10.0, 12.5, 14.5] .* 3600 #LES time is in sec
     shf = FT[-30.0, 90.0, 140.0, 140.0, 100.0, -10, -10] # W/m^2
-    profile = Dierckx.Spline1D(t_Sur_in, shf; k = 1)
+    profile = Intp.interpolate((t_Sur_in, ), shf, Intp.Gridded(Intp.Linear()))
     return TimeProfile(profile)
 end
 
@@ -106,6 +106,6 @@ end
 function ARM_SGP_lhf(::Type{FT}) where {FT}
     t_Sur_in = FT[0.0, 4.0, 6.5, 7.5, 10.0, 12.5, 14.5] .* 3600 #LES time is in sec
     lhf = FT[5.0, 250.0, 450.0, 500.0, 420.0, 180.0, 0.0] # W/m^2
-    profile = Dierckx.Spline1D(t_Sur_in, lhf; k = 1)
+    profile = Intp.interpolate((t_Sur_in, ), lhf, Intp.Gridded(Intp.Linear()))
     return TimeProfile(profile)
 end

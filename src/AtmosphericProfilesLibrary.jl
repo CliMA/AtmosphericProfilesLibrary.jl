@@ -1,6 +1,6 @@
 module AtmosphericProfilesLibrary
 
-import Dierckx
+import Interpolations as Intp
 
 abstract type AbstractProfile end
 struct TimeProfile{P} <: AbstractProfile

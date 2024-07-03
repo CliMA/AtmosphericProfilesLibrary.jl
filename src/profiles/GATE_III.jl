@@ -15,7 +15,7 @@ function GATE_III_q_tot(::Type{FT}) where {FT}
                0.9, 0.5, 0.25, 0.125, 0.065, 0.003, 0.0015, 0.0007,  0.0003,  0.0001,  0.0001,  0.0001,  0.0001,
                0.0001,  0.0001,  0.0001,  0.0001,  0.0001,  0.0001,  0.0001,  0.0001,  0.0001, 0.0001] ./ 1000 # mixing ratio should be in kg/kg
     q_tot = r_in ./ (1 .+ r_in) # convert mixing ratio to specific humidity
-    profile = Dierckx.Spline1D(z_in, q_tot; k = 1)
+    profile = Intp.interpolate((z_in, ), q_tot, Intp.Gridded(Intp.Linear()))
     return ZProfile(profile)
 end
 
@@ -26,7 +26,7 @@ function GATE_III_u(::Type{FT}) where {FT}
     U_in = FT[  -1, -1.75, -2.5, -3.6, -6.0, -8.75, -11.75, -13.0, -13.1, -12.1, -11.0, -8.5, -5.0, -2.6, 0.0,
                0.5, 0.4,  0.3,   0.0,  -1.0, -2.5,   -3.5,   -4.5, -4.8, -5.0, -3.5, -2.0, -1.0, -1.0, -1.0,
                -1.5, -2.0, -2.5, -2.6, -2.7, -3.0, -3.0, -3.0] # [m/s]
-    profile = Dierckx.Spline1D(z_in, U_in; k = 1)
+    profile = Intp.interpolate((z_in, ), U_in, Intp.Gridded(Intp.Linear()))
     return ZProfile(profile)
 end
 
@@ -36,7 +36,7 @@ function GATE_III_T(::Type{FT}) where {FT}
     z_in = GATE_III_z(FT)
     T_in = FT[299.184, 294.836, 294.261, 288.773, 276.698, 265.004, 253.930, 243.662, 227.674, 214.266, 207.757, 201.973, 198.278, 197.414, 198.110, 198.110]
     z_T_in = FT[0.0, 0.492, 0.700, 1.698, 3.928, 6.039, 7.795, 9.137, 11.055, 12.645, 13.521, 14.486, 15.448, 16.436, 17.293, 22.0] .* 1000 # for km
-    profile = Dierckx.Spline1D(z_T_in, T_in; k = 1)
+    profile = Intp.interpolate((z_T_in, ), T_in, Intp.Gridded(Intp.Linear()))
     return ZProfile(profile)
 end
 
@@ -77,7 +77,7 @@ function GATE_III_dqtdt(::Type{FT}) where {FT}
                    0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0] ./ (24 * 3600) ./ 1000
 
     Qtend_in = r_tend_in ./ (1 .+ r_tend_in) # convert mixing ratio to specific humidity
-    profile = Dierckx.Spline1D(z_in, Qtend_in; k = 1)
+    profile = Intp.interpolate((z_in, ), Qtend_in, Intp.Gridded(Intp.Linear()))
     return ZProfile(profile)
 end
 
@@ -97,7 +97,7 @@ function GATE_III_dTdt(::Type{FT}) where {FT}
                   -3.7, -3.5, -3.25, -3.0, -2.8,  -2.5, -2.1,  -1.7,  -1.3,   -1.0,   -0.7,   -0.5, -0.4,
                   -0.3, -0.2, -0.1,-0.05,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0] ./ (24*3600)
 
-    profile_T = Dierckx.Spline1D(z_in, Ttend_in; k = 1)
-    profile_R = Dierckx.Spline1D(z_in, RAD_in; k = 1)
+    profile_T = Intp.interpolate((z_in, ), Ttend_in, Intp.Gridded(Intp.Linear()))
+    profile_R = Intp.interpolate((z_in, ), RAD_in, Intp.Gridded(Intp.Linear()))
     return ZProfile(z -> profile_T(z) + profile_R(z))
 end
