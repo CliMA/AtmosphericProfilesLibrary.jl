@@ -21,7 +21,8 @@ function TRMM_LBA_p(::Type{FT}) where {FT}
               182.3, 167.9, 154.9, 143.0, 131.1, 119.7, 108.9,
               100.1,  92.1,  84.6,  77.5,  71.4,  65.9,  60.7,
                55.9,  51.3,  47.2,  43.3,  10.3] .* 100 # LES pres is in pasc
-    return Dierckx.Spline1D(z_in, p_in; k = 1)
+    prof = Dierckx.Spline1D(z_in, p_in; k = 1)
+    return ZProfile(prof)
 end
 """ [Grabowski2006](@cite) """
 function TRMM_LBA_T(::Type{FT}) where {FT}
@@ -33,7 +34,8 @@ function TRMM_LBA_T(::Type{FT}) where {FT}
              -59.16, -63.60, -67.68, -70.77, -74.41, -77.51, -80.64,
              -80.69, -80.00, -81.38, -81.17, -78.32, -74.77, -74.52,
              -72.62, -70.87, -69.19, -66.90, -66.90] .+ FT(273.15) # LES T is in deg K
-    return Dierckx.Spline1D(z_in, T_in; k = 1)
+    prof = Dierckx.Spline1D(z_in, T_in; k = 1)
+    return ZProfile(prof)
 end
 """ [Grabowski2006](@cite) """
 function TRMM_LBA_RH(::Type{FT}) where {FT}
@@ -45,7 +47,8 @@ function TRMM_LBA_RH(::Type{FT}) where {FT}
                45.33,  39.78,  33.78,  28.78,  24.67,  20.67,  17.67,
                17.11,  16.22,  14.22,  13.00,  13.00,  12.22,   9.56,
                 7.78,   5.89,   4.33,   3.00,   3.00]
-    return Dierckx.Spline1D(z_in, RH_in; k = 1)
+    prof = Dierckx.Spline1D(z_in, RH_in; k = 1)
+    return ZProfile(prof)
 end
 """ [Grabowski2006](@cite) """
 function TRMM_LBA_u(::Type{FT}) where {FT}
@@ -57,7 +60,8 @@ function TRMM_LBA_u(::Type{FT}) where {FT}
              -9.00,  -7.77,  -5.37,  -3.88,  -1.15,  -2.36,  -9.20,
              -8.01,  -5.68,  -8.83, -14.51, -15.55, -15.36, -17.67,
             -17.82, -18.94, -15.92, -15.32, -15.32]
-    return Dierckx.Spline1D(z_in, u_in; k = 1)
+    prof = Dierckx.Spline1D(z_in, u_in; k = 1)
+    return ZProfile(prof)
 end
 """ [Grabowski2006](@cite) """
 function TRMM_LBA_v(::Type{FT}) where {FT}
@@ -69,16 +73,17 @@ function TRMM_LBA_v(::Type{FT}) where {FT}
                3.14,   3.93,   7.57,   2.58,   2.50,   6.44,   6.84,
                0.19,  -2.20,  -3.60,   0.56,   6.68,   9.41,   7.03,
                5.32,   1.14,  -0.65,   5.27,   5.27]
-    return Dierckx.Spline1D(z_in, v_in; k = 1)
+    prof = Dierckx.Spline1D(z_in, v_in; k = 1)
+    return ZProfile(prof)
 end
 
 """ [Grabowski2006](@cite) """
 function TRMM_LBA_tke(::Type{FT}) where {FT}
-    z -> if z <= 2500.0
+    ZProfile(z -> if z <= 2500.0
         FT(1) - z / 3000
     else
         FT(0)
-    end
+    end)
 end
 """ TMP TKE profile for testing """
 function TRMM_LBA_tke_prescribed(::Type{FT}) where {FT}
@@ -106,7 +111,7 @@ function TRMM_LBA_tke_prescribed(::Type{FT}) where {FT}
        0.14929, 0.07465, 0.00635, 0.     , 0.     , 0.     , 0.     ,
        0.     , 0.     , 0.     , 0.     , 0.     ]
     not_type_stable_spline = Dierckx.Spline1D(z_in, tke_in; k = 1)
-    return x -> FT(not_type_stable_spline(x))
+    return ZProfile(x -> FT(not_type_stable_spline(x)))
 end
 
 
@@ -230,5 +235,5 @@ function TRMM_LBA_radiation(::Type{FT}) where {FT}
     rad_in .= rad_in ./ 86400
     rad_in = (rad_in')::LinearAlgebra.Adjoint{FT, Matrix{FT}}
     profile = Dierckx.Spline2D(rad_time, z_in, rad_in; kx = 1, ky = 1)
-    return profile
+    return TimeZProfile(profile)
 end

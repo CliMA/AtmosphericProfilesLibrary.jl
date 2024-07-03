@@ -1,19 +1,19 @@
 """ [Nieuwstadt1993](@cite) """
-Nieuwstadt_θ_liq_ice(::Type{FT}) where {FT} = z -> if z <= 1350.0
+Nieuwstadt_θ_liq_ice(::Type{FT}) where {FT} = ZProfile(z -> if z <= 1350.0
         FT(300)
     else
         FT(300) + 3 * (z - 1350) / 1000
-    end
+    end)
 
 """ [Nieuwstadt1993](@cite) """
-Nieuwstadt_u(::Type{FT}) where {FT} = z -> FT(0.01)
+Nieuwstadt_u(::Type{FT}) where {FT} = ZProfile(z -> FT(0.01))
 
 """ [Nieuwstadt1993](@cite) """
-Nieuwstadt_tke(::Type{FT}) where {FT} = z -> if (z <= 1600.0)
+Nieuwstadt_tke(::Type{FT}) where {FT} = ZProfile(z -> if (z <= 1600.0)
         FT(0.1) * FT(1.46) * FT(1.46) * (1 - z / 1600)
     else
         FT(0)
-    end
+    end)
 
 """ TMP TKE profile for testing """
 function Nieuwstadt_tke_prescribed(::Type{FT}) where {FT}
@@ -52,5 +52,5 @@ function Nieuwstadt_tke_prescribed(::Type{FT}) where {FT}
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     not_type_stable_spline = Dierckx.Spline1D(z_in, tke_in; k = 1)
-    return x -> FT(not_type_stable_spline(x))
+    return ZProfile(x -> FT(not_type_stable_spline(x)))
 end

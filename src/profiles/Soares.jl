@@ -1,24 +1,24 @@
 """ [Soares2004](@cite) """
-Soares_q_tot(::Type{FT}) where {FT} = z -> if z <= 1350.0
+Soares_q_tot(::Type{FT}) where {FT} = ZProfile(z -> if z <= 1350.0
         FT(5.0e-3) - FT(3.7e-4) * z / 1000
     else
         FT(5.0e-3) - FT(3.7e-4) * FT(1.35) - FT(9.4e-4) * (z - 1350) / 1000
-    end
+    end)
 """ [Soares2004](@cite) """
-Soares_θ_liq_ice(::Type{FT}) where {FT} = z -> if z <= 1350.0
+Soares_θ_liq_ice(::Type{FT}) where {FT} = ZProfile(z -> if z <= 1350.0
         FT(300.0)
     else
         FT(300) + 2 * (z - 1350) / 1000
-    end
+    end)
 """ [Soares2004](@cite) """
-Soares_u(::Type{FT}) where {FT} = z -> FT(0.01)
+Soares_u(::Type{FT}) where {FT} = ZProfile(z -> FT(0.01))
 
 """ [Soares2004](@cite) """
-Soares_tke(::Type{FT}) where {FT} = z -> if z <= 1600.0
+Soares_tke(::Type{FT}) where {FT} = ZProfile(z -> if z <= 1600.0
         FT(0.1) * FT(1.46) * FT(1.46) * (1 - z / 1600)
     else
         FT(0)
-    end
+    end)
 """ TMP TKE profile for testing """
 function Soares_tke_prescribed(::Type{FT}) where {FT}
     z_in = FT[12.5, 37.5, 62.5, 87.5, 112.5, 137.5, 162.5, 187.5, 212.5, 237.5, 262.5, 287.5, 312.5, 337.5,
@@ -47,5 +47,5 @@ function Soares_tke_prescribed(::Type{FT}) where {FT}
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     not_type_stable_spline = Dierckx.Spline1D(z_in, tke_in; k = 1)
-    return x -> FT(not_type_stable_spline(x))
+    return ZProfile(x -> FT(not_type_stable_spline(x)))
 end

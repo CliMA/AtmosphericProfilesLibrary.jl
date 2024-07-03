@@ -62,7 +62,7 @@ function DryBubble_θ_liq_ice(::Type{FT}) where {FT}
         299.9837, 299.9837
     ]
     profile = Dierckx.Spline1D(z_in, θ_liq_ice_in; k = 1)
-    return profile
+    return ZProfile(profile)
 end
 
 """ :( """
@@ -98,7 +98,7 @@ function DryBubble_updrafts_θ_liq_ice(::Type{FT}) where {FT}
         300.2587, 300.2216, 300.1782, 300.1452, 300.1143, 300.0859,
         300.0603, 300.0408, 300.0211, 300.0067, 299.9963, 299.9884]
     profile = Dierckx.Spline1D(z_in, θ_liq_in; k = 1)
-    return profile
+    return ZProfile(profile)
 end
 
 """ :( """
@@ -115,7 +115,7 @@ function DryBubble_updrafts_area(::Type{FT}) where {FT}
         0.13 , 0.13 , 0.125, 0.12 , 0.115, 0.115, 0.11 , 0.105, 0.1  ,
         0.095, 0.085, 0.08 , 0.07 , 0.055, 0.04]
     profile = Dierckx.Spline1D(z_in, Area_in; k = 1)
-    return profile
+    return ZProfile(profile)
 end
 
 """ :( """
@@ -133,7 +133,7 @@ function DryBubble_updrafts_w(::Type{FT}) where {FT}
         0.1422, 0.1425, 0.1424, 0.1419, 0.1361, 0.135 , 0.1335, 0.1316,
         0.1294, 0.1302, 0.1271, 0.1264, 0.1269, 0.1256]
     profile = Dierckx.Spline1D(z_in, W_in; k = 1)
-    return profile
+    return ZProfile(profile)
 end
 
 """ :( """
@@ -154,5 +154,5 @@ function DryBubble_updrafts_T(::Type{FT}) where {FT}
         267.2649, 266.7432, 266.2159, 265.698 , 265.1821, 264.6685,
         264.1574, 263.6518, 263.1461, 262.6451, 262.1476, 261.6524]
     profile = Dierckx.Spline1D(z_in, T_in; k = 1)
-    return profile
+    return ZProfile(profile)
 end

@@ -1,5 +1,5 @@
 """ [Siebesma2003](@cite) """
-Bomex_θ_liq_ice(::Type{FT}) where {FT} = z -> if z <= 520.0
+Bomex_θ_liq_ice(::Type{FT}) where {FT} = ZProfile(z -> if z <= 520.0
         FT(298.7)
     elseif z > 520.0 && z <= 1480.0
         FT(298.7) + (z - 520) * (FT(302.4) - FT(298.7)) / (1480 - 520)
@@ -9,29 +9,29 @@ Bomex_θ_liq_ice(::Type{FT}) where {FT} = z -> if z <= 520.0
         FT(308.2) + (z - 2000) * (FT(311.85) - FT(308.2)) / (3000 - 2000)
     else
         FT(0)
-    end
+    end)
 """ [Siebesma2003](@cite) """
-Bomex_q_tot(::Type{FT}) where {FT} = z -> if z <= 520
+Bomex_q_tot(::Type{FT}) where {FT} = ZProfile(z -> if z <= 520
         (FT(17.0) + z * (FT(16.3) - 17) / 520) / 1000
     elseif z > 520.0 && z <= 1480.0
         (FT(16.3) + (z - 520) * (FT(10.7) - FT(16.3)) / (1480 - 520)) / 1000
     elseif z > 1480.0 && z <= 2000.0
         (FT(10.7) + (z - 1480) * (FT(4.2) - FT(10.7)) / (2000 - 1480)) / 1000
-    elseif z > 2000.0
+    else
         (FT(4.2) + (z - 2000) * (3 - FT(4.2)) / (3000 - 2000)) / 1000
-    end
+    end)
 """ [Siebesma2003](@cite) """
-Bomex_u(::Type{FT}) where {FT} = z -> if z <= 700.0
+Bomex_u(::Type{FT}) where {FT} = ZProfile(z -> if z <= 700.0
         FT(-8.75)
-    elseif z > 700.0
+    else
         FT(-8.75) + (z - 700) * (FT(-4.61) - FT(-8.75)) / (3000 - 700)
-    end
+    end)
 """ [Siebesma2003](@cite) """
-Bomex_tke(::Type{FT}) where {FT} = z -> if (z <= 2500.0)
+Bomex_tke(::Type{FT}) where {FT} = ZProfile(z -> if (z <= 2500.0)
         FT(1) - z / 3000
     else
         FT(0)
-    end
+    end)
 """ TMP TKE profile for testing """
 function Bomex_tke_prescribed(::Type{FT}) where {FT}
     z_in = FT[25.0, 75.0, 125.0, 175.0, 225.0, 275.0, 325.0, 375.0, 425.0, 475.0, 525.0,
@@ -46,38 +46,38 @@ function Bomex_tke_prescribed(::Type{FT}) where {FT}
                 0.0162, 0.0068, 0.0024, 0.0007, 0.0001, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     not_type_stable_spline = Dierckx.Spline1D(z_in, tke_in; k = 1)
-    return x -> FT(not_type_stable_spline(x))
+    return ZProfile(x -> FT(not_type_stable_spline(x)))
 end
 
 # Geostrophic velocity profiles
 """ :( """
-Bomex_geostrophic_u(::Type{FT}) where {FT} = z -> -10 + FT(1.8e-3) * z
+Bomex_geostrophic_u(::Type{FT}) where {FT} = ZProfile(z -> -10 + FT(1.8e-3) * z)
 """ :( """
-Bomex_geostrophic_v(::Type{FT}) where {FT} = z -> FT(0)
+Bomex_geostrophic_v(::Type{FT}) where {FT} = ZProfile(z -> FT(0))
 
 """ dTdt(Π, z) """
-Bomex_dTdt(::Type{FT}) where {FT} = (Π, z) -> if z <= 1500.0
+Bomex_dTdt(::Type{FT}) where {FT} = ΠZProfile((Π, z) -> if z <= 1500.0
         (-2 / (3600 * 24)) * Π
     else
         (-2 / (3600 * 24) + (z - 1500) * (0 - -2 / (3600 * 24)) / (3000 - 1500)) * Π
-    end
+    end)
 
 # Large-scale drying
 """ :( """
-Bomex_dqtdt(::Type{FT}) where {FT} = z -> if z <= 300.0
+Bomex_dqtdt(::Type{FT}) where {FT} = ZProfile(z -> if z <= 300.0
         FT(-1.2e-8)   #kg/(kg * s)
     elseif z > 300.0 && z <= 500.0
         FT(-1.2e-8) + (z - 300) * (0 - FT(-1.2e-8)) / (500 - 300) #kg/(kg * s)
     else
         FT(0)
-    end
+    end)
 
 # Large scale subsidence
 """ :( """
-Bomex_subsidence(::Type{FT}) where {FT} = z -> if z <= 1500.0
+Bomex_subsidence(::Type{FT}) where {FT} = ZProfile(z -> if z <= 1500.0
         FT(0) + z * (FT(-0.65) / 100 - 0) / (1500 - 0)
     elseif z > 1500.0 && z <= 2100.0
         FT(-0.65) / 100 + (z - 1500) * (0 - FT(-0.65) / 100) / (2100 - 1500)
     else
         FT(0)
-    end
+    end)

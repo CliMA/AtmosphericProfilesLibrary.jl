@@ -16,7 +16,7 @@ function GATE_III_q_tot(::Type{FT}) where {FT}
                0.0001,  0.0001,  0.0001,  0.0001,  0.0001,  0.0001,  0.0001,  0.0001,  0.0001, 0.0001] ./ 1000 # mixing ratio should be in kg/kg
     q_tot = r_in ./ (1 .+ r_in) # convert mixing ratio to specific humidity
     profile = Dierckx.Spline1D(z_in, q_tot; k = 1)
-    return profile
+    return ZProfile(profile)
 end
 
 
@@ -27,7 +27,7 @@ function GATE_III_u(::Type{FT}) where {FT}
                0.5, 0.4,  0.3,   0.0,  -1.0, -2.5,   -3.5,   -4.5, -4.8, -5.0, -3.5, -2.0, -1.0, -1.0, -1.0,
                -1.5, -2.0, -2.5, -2.6, -2.7, -3.0, -3.0, -3.0] # [m/s]
     profile = Dierckx.Spline1D(z_in, U_in; k = 1)
-    return profile
+    return ZProfile(profile)
 end
 
 """ [Khairoutdinov2009](@cite) """
@@ -37,16 +37,16 @@ function GATE_III_T(::Type{FT}) where {FT}
     T_in = FT[299.184, 294.836, 294.261, 288.773, 276.698, 265.004, 253.930, 243.662, 227.674, 214.266, 207.757, 201.973, 198.278, 197.414, 198.110, 198.110]
     z_T_in = FT[0.0, 0.492, 0.700, 1.698, 3.928, 6.039, 7.795, 9.137, 11.055, 12.645, 13.521, 14.486, 15.448, 16.436, 17.293, 22.0] .* 1000 # for km
     profile = Dierckx.Spline1D(z_T_in, T_in; k = 1)
-    return profile
+    return ZProfile(profile)
 end
 
 """ [Khairoutdinov2009](@cite) """
 function GATE_III_tke(::Type{FT}) where {FT}
-    return z -> if z <= 2500.0
-            FT(1) - z / 3000.0
+    return ZProfile(z -> if z <= 2500.0
+            FT(1 - z / 3000)
         else
             FT(0)
-        end
+        end)
 end
 
 #=
@@ -78,7 +78,7 @@ function GATE_III_dqtdt(::Type{FT}) where {FT}
 
     Qtend_in = r_tend_in ./ (1 .+ r_tend_in) # convert mixing ratio to specific humidity
     profile = Dierckx.Spline1D(z_in, Qtend_in; k = 1)
-    return profile
+    return ZProfile(profile)
 end
 
 """ [Khairoutdinov2009](@cite) """
@@ -99,5 +99,5 @@ function GATE_III_dTdt(::Type{FT}) where {FT}
 
     profile_T = Dierckx.Spline1D(z_in, Ttend_in; k = 1)
     profile_R = Dierckx.Spline1D(z_in, RAD_in; k = 1)
-    return z -> profile_T(z) + profile_R(z)
+    return ZProfile(z -> profile_T(z) + profile_R(z))
 end
