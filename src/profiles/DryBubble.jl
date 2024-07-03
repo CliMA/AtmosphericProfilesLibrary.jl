@@ -61,8 +61,7 @@ function DryBubble_θ_liq_ice(::Type{FT}) where {FT}
         299.9837, 299.9837, 299.9837, 299.9837, 299.9837, 299.9837,
         299.9837, 299.9837
     ]
-    profile = Intp.interpolate((z_in, ), θ_liq_ice_in, Intp.Gridded(Intp.Linear()))
-    return ZProfile(profile)
+    return ZProfile(linear_interp(z_in, θ_liq_ice_in))
 end
 
 """ :( """
@@ -97,8 +96,7 @@ function DryBubble_updrafts_θ_liq_ice(::Type{FT}) where {FT}
         300.5212, 300.482 , 300.4272, 300.3875, 300.3354, 300.2968,
         300.2587, 300.2216, 300.1782, 300.1452, 300.1143, 300.0859,
         300.0603, 300.0408, 300.0211, 300.0067, 299.9963, 299.9884]
-    profile = Intp.interpolate((z_in, ), θ_liq_in, Intp.Gridded(Intp.Linear()))
-    return ZProfile(profile)
+    return ZProfile(linear_interp(z_in, θ_liq_in))
 end
 
 """ :( """
@@ -114,8 +112,7 @@ function DryBubble_updrafts_area(::Type{FT}) where {FT}
         0.15 , 0.145, 0.145, 0.145, 0.14 , 0.14 , 0.14 , 0.135, 0.135,
         0.13 , 0.13 , 0.125, 0.12 , 0.115, 0.115, 0.11 , 0.105, 0.1  ,
         0.095, 0.085, 0.08 , 0.07 , 0.055, 0.04]
-    profile = Intp.interpolate((z_in, ), Area_in, Intp.Gridded(Intp.Linear()))
-    return ZProfile(profile)
+    return ZProfile(linear_interp(z_in, Area_in))
 end
 
 """ :( """
@@ -132,8 +129,7 @@ function DryBubble_updrafts_w(::Type{FT}) where {FT}
         0.1601, 0.1559, 0.1589, 0.1543, 0.1496, 0.1514, 0.1464, 0.1475,
         0.1422, 0.1425, 0.1424, 0.1419, 0.1361, 0.135 , 0.1335, 0.1316,
         0.1294, 0.1302, 0.1271, 0.1264, 0.1269, 0.1256]
-    profile = Intp.interpolate((z_in, ), W_in, Intp.Gridded(Intp.Linear()))
-    return ZProfile(profile)
+    return ZProfile(linear_interp(z_in, W_in))
 end
 
 """ :( """
@@ -153,6 +149,5 @@ function DryBubble_updrafts_T(::Type{FT}) where {FT}
         270.4339, 269.9094, 269.3711, 268.8465, 268.311 , 267.7877,
         267.2649, 266.7432, 266.2159, 265.698 , 265.1821, 264.6685,
         264.1574, 263.6518, 263.1461, 262.6451, 262.1476, 261.6524]
-    profile = Intp.interpolate((z_in, ), T_in, Intp.Gridded(Intp.Linear()))
-    return ZProfile(profile)
+    return ZProfile(linear_interp(z_in, T_in))
 end

@@ -28,6 +28,11 @@ struct ΠZProfile{P} <: AbstractProfile
 end
 @inline (prof::ΠZProfile)(Π, z) = prof.prof(Π, z)
 
+@inline function linear_interp(z, x)
+  _interp = Intp.interpolate((z, ), x, Intp.Gridded(Intp.Linear()))
+  return Intp.extrapolate(_interp, Intp.Flat())
+end
+
 # Large data-based profiles
 include("profiles/Soares.jl")
 include("profiles/Nieuwstadt.jl")

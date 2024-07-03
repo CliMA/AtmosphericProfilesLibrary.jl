@@ -45,8 +45,7 @@ function Bomex_tke_prescribed(::Type{FT}) where {FT}
                 0.1468, 0.1470, 0.1458, 0.1423, 0.1351, 0.1224, 0.1033, 0.0793, 0.0542, 0.0322,
                 0.0162, 0.0068, 0.0024, 0.0007, 0.0001, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    not_type_stable_spline = Intp.interpolate((z_in, ), tke_in, Intp.Gridded(Intp.Linear()))
-    return ZProfile(x -> FT(not_type_stable_spline(x)))
+    return ZProfile(linear_interp(z_in, tke_in))
 end
 
 # Geostrophic velocity profiles
