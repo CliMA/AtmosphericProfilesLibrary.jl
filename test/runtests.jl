@@ -1,25 +1,40 @@
 using Test
 using AtmosphericProfilesLibrary
+import AtmosphericProfilesLibrary as APL
 
 iscallable(f) = !isempty(methods(f))
-@testset "AtmosphericProfilesLibrary" begin
-    for name in names(AtmosphericProfilesLibrary; all = true)
-        startswith(string(name), "#") && continue
-        name == :AtmosphericProfilesLibrary && continue
-        name == :TRMM_LBA_z && continue # returns an array for other profiles
-        name == :ARM_SGP_z && continue # returns an array for other profiles
-        name == :GATE_III_z && continue # returns an array for other profiles
-        name == :GATE_III_z_in && continue # returns an array for other profiles
-        name == :ARM_SGP_time && continue # returns an array for other profiles
-        name == :DryBubble_updrafts_z && continue # returns an array for other profiles
-        name == :eval && continue
-        name == :include && continue
-        prof = getproperty(AtmosphericProfilesLibrary, name)
-        iscallable(prof) || @show name
 
-        # Test that function is callable
-        @test iscallable(prof)
-        # Test for type-stability
-        @test @inferred Float32 iscallable(prof(Float32))
+function test_profile(::Type{FT}, prof, name) where {FT}
+    @debug "Testing $name"
+    if prof isa APL.TimeProfile
+        prof(1)
+        @inferred prof(Float32(1))
+    elseif prof isa APL.TimeZProfile
+        prof(1, 1)
+        @inferred prof(Float32(1), Float32(1))
+    elseif prof isa APL.ZProfile
+        prof(1)
+        @inferred prof(Float32(1))
+    elseif prof isa APL.ΠTimeZProfile
+        prof(1,1,1)
+        @inferred prof(Float32(1),Float32(1),Float32(1))
+    elseif prof isa APL.ΠZProfile
+        prof(1,1)
+        @inferred prof(Float32(1),Float32(1))
+    else
+        @show name
+        @show prof
+        error("uncaught case")
+    end
+end
+
+include("profiles.jl")
+
+@testset "AtmosphericProfilesLibrary" begin
+    for (name, prof) in profiles(Float64)
+        test_profile(Float64, prof, name)
+    end
+    for (name, prof) in profiles(Float32)
+        test_profile(Float32, prof, name)
     end
 end

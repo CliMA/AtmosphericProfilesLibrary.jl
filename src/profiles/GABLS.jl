@@ -1,36 +1,36 @@
 """ :( """
-GABLS_u(::Type{FT}) where {FT} = z -> FT(8.0)
+GABLS_u(::Type{FT}) where {FT} = ZProfile(z -> FT(8.0))
 """ :( """
-GABLS_v(::Type{FT}) where {FT} = z -> FT(0.0)
+GABLS_v(::Type{FT}) where {FT} = ZProfile(z -> FT(0.0))
 
 """ :( """
 GABLS_θ_liq_ice(::Type{FT}) where {FT} =
-    z -> if z <= 100.0
+    ZProfile(z -> if z <= 100.0
         FT(265)
     else
         FT(265) + (z - 100) * FT(0.01)
-    end
+    end)
 
 """ :( """
-GABLS_q_tot(::Type{FT}) where {FT} = z -> FT(0)
+GABLS_q_tot(::Type{FT}) where {FT} = ZProfile(z -> FT(0))
 
 """ :( """
 GABLS_tke(::Type{FT}) where {FT} =
-    z -> if z <= 250.0
+    ZProfile(z -> if z <= 250.0
         FT(0.4) * (1 - z / 250) * (1 - z / 250) * (1 - z / 250)
     else
         FT(0)
-    end
+    end)
 
 """ TMP TKE profile for testing """
 function GABLS_tke_prescribed(::Type{FT}) where {FT}
     z_in = FT[25.0, 75.0, 125.0, 175.0, 225.0, 275.0, 325.0, 375.0]
     tke_in = FT[0.4662, 0.3873, 0.2777, 0.0277, 0.0003, 5.89e-8, 0.0, 0.0]
     not_type_stable_spline = Dierckx.Spline1D(z_in, tke_in; k = 1)
-    return x -> FT(not_type_stable_spline(x))
+    return ZProfile(x -> FT(not_type_stable_spline(x)))
 end
 
 """ :( """
-GABLS_geostrophic_ug(::Type{FT}) where {FT} = z -> FT(8)
+GABLS_geostrophic_ug(::Type{FT}) where {FT} = ZProfile(z -> FT(8))
 """ :( """
-GABLS_geostrophic_vg(::Type{FT}) where {FT} = z -> FT(0)
+GABLS_geostrophic_vg(::Type{FT}) where {FT} = ZProfile(z -> FT(0))
