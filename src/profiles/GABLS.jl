@@ -26,8 +26,7 @@ GABLS_tke(::Type{FT}) where {FT} =
 function GABLS_tke_prescribed(::Type{FT}) where {FT}
     z_in = FT[25.0, 75.0, 125.0, 175.0, 225.0, 275.0, 325.0, 375.0]
     tke_in = FT[0.4662, 0.3873, 0.2777, 0.0277, 0.0003, 5.89e-8, 0.0, 0.0]
-    not_type_stable_spline = Dierckx.Spline1D(z_in, tke_in; k = 1)
-    return ZProfile(x -> FT(not_type_stable_spline(x)))
+    return ZProfile(linear_interp(z_in, tke_in))
 end
 
 """ :( """

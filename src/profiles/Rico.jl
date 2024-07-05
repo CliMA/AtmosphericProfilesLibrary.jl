@@ -78,6 +78,5 @@ function Rico_tke_prescribed(::Type{FT}) where {FT}
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0]
-    not_type_stable_spline = Dierckx.Spline1D(z_in, tke_in; k = 1)
-    return ZProfile(x -> FT(not_type_stable_spline(x)))
+    return ZProfile(linear_interp(z_in, tke_in))
 end

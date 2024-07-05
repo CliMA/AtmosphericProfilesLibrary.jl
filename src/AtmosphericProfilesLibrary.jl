@@ -1,6 +1,6 @@
 module AtmosphericProfilesLibrary
 
-import Dierckx
+import Interpolations as Intp
 
 abstract type AbstractProfile end
 struct TimeProfile{P} <: AbstractProfile
@@ -27,6 +27,11 @@ struct ΠZProfile{P} <: AbstractProfile
   prof::P
 end
 @inline (prof::ΠZProfile)(Π, z) = prof.prof(Π, z)
+
+@inline function linear_interp(z, x)
+  _interp = Intp.interpolate((z, ), x, Intp.Gridded(Intp.Linear()))
+  return Intp.extrapolate(_interp, Intp.Flat())
+end
 
 # Large data-based profiles
 include("profiles/Soares.jl")

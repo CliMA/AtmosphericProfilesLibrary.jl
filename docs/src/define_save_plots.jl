@@ -1,5 +1,4 @@
 import Plots
-import Dierckx
 
 # https://github.com/jheinen/GR.jl/issues/278#issuecomment-587090846
 ENV["GKSwstype"] = "nul"

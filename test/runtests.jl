@@ -5,7 +5,7 @@ import AtmosphericProfilesLibrary as APL
 iscallable(f) = !isempty(methods(f))
 
 function test_profile(::Type{FT}, prof, name) where {FT}
-    @debug "Testing $name"
+    # println("Testing $name")
     if prof isa APL.TimeProfile
         prof(1)
         @inferred prof(Float32(1))
