@@ -48,5 +48,6 @@ include("profiles/GABLS.jl")
 include("profiles/SP.jl")
 include("profiles/DryBubble.jl")
 include("profiles/ISDAC.jl")
+include("profiles/Larcform1.jl")
 
 end # module
