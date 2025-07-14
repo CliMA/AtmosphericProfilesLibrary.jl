@@ -67,12 +67,12 @@ end
 p = Larcform1_P(FT)
 T = Larcform1_T(FT)
 RH = Larcform1_RH(FT)
-q = FT(3E-6) # defined above z_threshold
 
 function combined_thermo_state(z)
     q_top = FT(3E-6) # defined above z_threshold 
-    z > z_300hpa ? TD.PhaseEquil_pTq(params, p(z), T(z), q) :
-    TD.PhaseEquil_pTRH(params, p(z), T(z), RH(z))
+    q_tot(z) = TD.q_vap_from_RH_liquid(params, p(z), T(z), RH(z))
+    #z > z_300hpa ? TD.PhaseEquil_pTq(params, p(z), T(z), q) :  TD.PhaseEquil_pTRH(params, p(z), T(z), RH(z))
+    z ≤ z_300hpa ? TD.PhaseEquil_pTq(params, p(z), T(z), q_tot(z)) : TD.PhaseEquil_pTq(params, p(z), T(z), q_top)
 end
 
 """ [pithan_2016]@cite """
