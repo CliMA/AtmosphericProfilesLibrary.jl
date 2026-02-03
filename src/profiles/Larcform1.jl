@@ -10,20 +10,23 @@ FT = Float64
 params = TP.ThermodynamicsParameters(FT)
 
 FT = Float64
-const z_inversion = FT(3937.0)
-const z_300hpa = FT(8458.0)
+const γ = FT(8E-3) # K/m
+const z_600hpa = FT(3937.0)
+const z_300hpa = FT(8457.61398053927)
 const P_0 = FT(101300.0)
 const T_0 = FT(273.0)                # K  (Surface temperature)
-const T_300hpa = FT(273.0 - 8E-3*(z_300hpa))          # K (Temperature at 300 hPa)
-const γ = FT(8E-3) # K/m            # Atmospheric lapse rate
+const T_300hpa = FT(T_0 - γ*(z_300hpa))          # K (Temperature at 300 hPa       # Atmospheric lapse rate
 const α = FT(0.2340468909276249)    # Rγ/g
 const g = FT(9.81)
 const R = FT(287.0) # J/kg/K
+# hPa = 100.0
+# ps = [1013, 600, 300].*hPa
+# zs = [0.0, 3936.83, 8457.61]
 
 # Temperature
 """ [pithan_2016]@cite """
 function Larcform1_T(::Type{FT}) where {FT}
-    z -> FT(if z ≤ z_inversion # surface to 600hpa
+    z -> FT(if z ≤ z_300hpa # surface to 600hpa
         T_0 - γ*z # K 
     else
         T_300hpa       # T_300hpa # K
@@ -33,9 +36,9 @@ end
 # Pressure
 """ [pithan_2016]@cite """
 function Larcform1_P(::Type{FT}) where {FT}
-    z -> FT(if z ≤ z_300hpa                    # surface to 300hpa
+    z -> FT(if z ≤ z_300hpa                 # surface to 300hpa
         P_0*(1-γ/T_0*z)^(1/α)
-    else                           # 300hpa to model top
+    else                                    # 300hpa to model top
         FT(300.E2)*exp(-g/(R*T_300hpa)*(z-z_300hpa))
     end)
 end
@@ -52,25 +55,26 @@ function Larcform1_z(::Type{FT}) where {FT}
 end
 
 """
-RH profile for Larcform1
+RH profile for Larcform1 below z_300hpa
 
-Only valid for z on {0, z_inversion}
-"""
-function Larcform1_RH(::Type{FT}) where {FT}
+Used for calculating the thermodynamic state for the whole domain.
+""" # This function checks out against Pithan2016
+function Larcform1_RH_input(::Type{FT}) where {FT}
     z = Larcform1_z(FT)
-    z_in = z.(FT(100.0) .* FT[1013.0, 600.0, 300.0, 100.0])
-    RH_in = FT[0.8, 0.2, 0.2, 0.2]
+    z_in = z.(FT(100.0) .* FT[1013.0, 600.0, 300.0])
+    RH_in = FT[0.8, 0.2, 0.2]
     return ZProfile(linear_interp(z_in, RH_in))
 end
 
 # Construct thermodynamic state for all z in domain
 p = Larcform1_P(FT)
 T = Larcform1_T(FT)
-RH = Larcform1_RH(FT)
+RH_input = Larcform1_RH_input(FT)
 
+# TODO define in pressure coordinates 
 function combined_thermo_state(z)
     q_top = FT(3E-6) # defined above z_threshold 
-    q_tot(z) = TD.q_vap_from_RH_liquid(params, p(z), T(z), RH(z))
+    q_tot(z) = TD.q_vap_from_RH_liquid(params, p(z), T(z), RH_input(z))
     #z > z_300hpa ? TD.PhaseEquil_pTq(params, p(z), T(z), q) :  TD.PhaseEquil_pTRH(params, p(z), T(z), RH(z))
     z ≤ z_300hpa ? TD.PhaseEquil_pTq(params, p(z), T(z), q_tot(z)) : TD.PhaseEquil_pTq(params, p(z), T(z), q_top)
 end
@@ -79,6 +83,12 @@ end
 function Larcform1_q_tot(::Type{FT}) where {FT}
     ts(z) = combined_thermo_state(z)
     ZProfile(z -> FT(TD.total_specific_humidity(params, ts(z))))
+end
+
+""" [pithan_2016]@cite """
+function Larcform1_RH(::Type{FT}) where {FT}
+    ts(z) = combined_thermo_state(z)
+    ZProfile(z -> FT(TD.relative_humidity(params, ts(z))))
 end
 
 # Geostrophic wind
