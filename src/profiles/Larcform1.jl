@@ -6,10 +6,9 @@
 import Thermodynamics as TD
 import ClimaParams as CP
 import Thermodynamics.Parameters as TP
-FT = Float64
+FT = Float32
 params = TP.ThermodynamicsParameters(FT)
 
-FT = Float64
 const γ = FT(8E-3) # K/m
 const z_600hpa = FT(3937.0)
 const z_300hpa = FT(8457.61398053927)
@@ -19,9 +18,9 @@ const T_300hpa = FT(T_0 - γ*(z_300hpa))          # K (Temperature at 300 hPa   
 const α = FT(0.2340468909276249)    # Rγ/g
 const g = FT(9.81)
 const R = FT(287.0) # J/kg/K
-# hPa = 100.0
-# ps = [1013, 600, 300].*hPa
-# zs = [0.0, 3936.83, 8457.61]
+hPa = FT(100.0)
+#ps = [1013, 600, 300].*hPa
+#zs = [0.0, 3936.83, 8457.61]
 
 # Temperature
 """ [pithan_2016]@cite """
@@ -35,7 +34,7 @@ end
 
 # Pressure
 """ [pithan_2016]@cite """
-function Larcform1_P(::Type{FT}) where {FT}
+function Larcform1_p(::Type{FT}) where {FT}
     z -> FT(if z ≤ z_300hpa                 # surface to 300hpa
         P_0*(1-γ/T_0*z)^(1/α)
     else                                    # 300hpa to model top
@@ -43,38 +42,42 @@ function Larcform1_P(::Type{FT}) where {FT}
     end)
 end
 
-""" [pithan_2016]@cite """
+""" [pithan_2016]@cite
+Gives the height z corresponding to a given pressure p (Pa) in the Larcform1 profile.
+
+"""
 function Larcform1_z(::Type{FT}) where {FT}
-    P -> FT(if P≥FT(300.E2)
-        return T_0/γ*(FT(1.0)-(P/P_0)^α)
-    elseif P<FT(300.E2) && P≥FT(0)
-        return T_0/γ*(1-(300/1013)^α) - R*T_300hpa/g*log(P/300.E2) # first term is z_300
+    p -> FT(if p≥ T(300hPa)
+        return T_0/γ*(FT(1.0)-(p/P_0)^α)
+    elseif p FT(300hPa) && p≥FT(0)
+        return T_0/γ*(1-(300/1013)^α) - R*T_300hpa/g*log(p/300.E2) # first term is z_300
     else
-        throw(DomainError(P, "Argument must be a non-negative real number"))
+        throw(DomainError(p, "Argument must be a non-negative real number"))
     end)
 end
 
 """
-RH profile for Larcform1 below z_300hpa
+RH profile for Larcform1 up to 300hPa. 
+    
+Used to construct full thermodynamic state lin `conbined_thermo_state`.
 
-Used for calculating the thermodynamic state for the whole domain.
-""" # This function checks out against Pithan2016
-function Larcform1_RH_input(::Type{FT}) where {FT}
-    z = Larcform1_z(FT)
-    z_in = z.(FT(100.0) .* FT[1013.0, 600.0, 300.0])
-    RH_in = FT[0.8, 0.2, 0.2]
-    return ZProfile(linear_interp(z_in, RH_in))
+"""
+function Larcform1_RH_sfcto300hpa(::Type{FT}) where {FT}
+    p_in = FT[0hPa, 600.0hPa, 1013.0hPa]
+    RH_in = FT[0.2, 0.2, 0.8]
+    prof = linear_interp(p_in, RH_in)
+    ZProfile(prof ∘ Larcform1_z(FT))
 end
 
 # Construct thermodynamic state for all z in domain
-p = Larcform1_P(FT)
+p = Larcform1_p(FT)
 T = Larcform1_T(FT)
-RH_input = Larcform1_RH_input(FT)
 
-# TODO define in pressure coordinates 
+RH_sfcto300hpa(z) = Larcform1_RH_to300hpa(FT)(p.(z))
+
 function combined_thermo_state(z)
     q_top = FT(3E-6) # defined above z_threshold 
-    q_tot(z) = TD.q_vap_from_RH_liquid(params, p(z), T(z), RH_input(z))
+    q_tot(z) = TD.q_vap_from_RH_liquid(params, p(z), T(z), RH_sfcto300hpa(p.(z)))
     #z > z_300hpa ? TD.PhaseEquil_pTq(params, p(z), T(z), q) :  TD.PhaseEquil_pTRH(params, p(z), T(z), RH(z))
     z ≤ z_300hpa ? TD.PhaseEquil_pTq(params, p(z), T(z), q_tot(z)) : TD.PhaseEquil_pTq(params, p(z), T(z), q_top)
 end
