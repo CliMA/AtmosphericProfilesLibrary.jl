@@ -49,7 +49,7 @@ Gives the height z corresponding to a given pressure p (Pa) in the Larcform1 pro
 function Larcform1_z(::Type{FT}) where {FT}
     p -> FT(if p≥ T(300hPa)
         return T_0/γ*(FT(1.0)-(p/P_0)^α)
-    elseif p FT(300hPa) && p≥FT(0)
+    elseif p<FT(300hPa) && p≥FT(0)
         return T_0/γ*(1-(300/1013)^α) - R*T_300hpa/g*log(p/300.E2) # first term is z_300
     else
         throw(DomainError(p, "Argument must be a non-negative real number"))
@@ -73,7 +73,7 @@ end
 p = Larcform1_p(FT)
 T = Larcform1_T(FT)
 
-RH_sfcto300hpa(z) = Larcform1_RH_to300hpa(FT)(p.(z))
+RH_sfcto300hpa(z) = Larcform1_RH_sfcto300hpa(FT)(p.(z))
 
 function combined_thermo_state(z)
     q_top = FT(3E-6) # defined above z_threshold 
