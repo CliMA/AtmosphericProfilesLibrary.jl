@@ -47,7 +47,7 @@ Gives the height z corresponding to a given pressure p (Pa) in the Larcform1 pro
 
 """
 function Larcform1_z(::Type{FT}) where {FT}
-    p -> FT(if p≥ T(300hPa)
+    p -> FT(if p ≥ T(300hPa)
         return T_0/γ*(FT(1.0)-(p/P_0)^α)
     elseif p<FT(300hPa) && p≥FT(0)
         return T_0/γ*(1-(300/1013)^α) - R*T_300hpa/g*log(p/300.E2) # first term is z_300
@@ -79,7 +79,8 @@ function combined_thermo_state(z)
     q_top = FT(3E-6) # defined above z_threshold 
     q_tot(z) = TD.q_vap_from_RH_liquid(params, p(z), T(z), RH_sfcto300hpa(p.(z)))
     #z > z_300hpa ? TD.PhaseEquil_pTq(params, p(z), T(z), q) :  TD.PhaseEquil_pTRH(params, p(z), T(z), RH(z))
-    z ≤ z_300hpa ? TD.PhaseEquil_pTq(params, p(z), T(z), q_tot(z)) : TD.PhaseEquil_pTq(params, p(z), T(z), q_top)
+    z ≤ z_300hpa ? TD.PhaseEquil_pTq(params, p(z), T(z), q_tot(z)) :
+    TD.PhaseEquil_pTq(params, p(z), T(z), q_top)
 end
 
 """ [pithan_2016]@cite """
