@@ -47,7 +47,7 @@ Gives the height z corresponding to a given pressure p (Pa) in the Larcform1 pro
 
 """
 function Larcform1_z(::Type{FT}) where {FT}
-    p -> FT(if p ≥ T(300hPa)
+    p -> FT(if p ≥ FT(300hPa)
         return T_0/γ*(FT(1.0)-(p/P_0)^α)
     elseif p<FT(300hPa) && p≥FT(0)
         return T_0/γ*(1-(300/1013)^α) - R*T_300hpa/g*log(p/300.E2) # first term is z_300
@@ -75,24 +75,53 @@ T = Larcform1_T(FT)
 
 RH_sfcto300hpa(z) = Larcform1_RH_sfcto300hpa(FT)(p.(z))
 
-function combined_thermo_state(z)
-    q_top = FT(3E-6) # defined above z_threshold 
-    q_tot(z) = TD.q_vap_from_RH_liquid(params, p(z), T(z), RH_sfcto300hpa(p.(z)))
-    #z > z_300hpa ? TD.PhaseEquil_pTq(params, p(z), T(z), q) :  TD.PhaseEquil_pTRH(params, p(z), T(z), RH(z))
-    z ≤ z_300hpa ? TD.PhaseEquil_pTq(params, p(z), T(z), q_tot(z)) :
-    TD.PhaseEquil_pTq(params, p(z), T(z), q_top)
-end
-
 """ [pithan_2016]@cite """
 function Larcform1_q_tot(::Type{FT}) where {FT}
-    ts(z) = combined_thermo_state(z)
-    ZProfile(z -> FT(TD.total_specific_humidity(params, ts(z))))
+    # Capture all needed quantities as typed locals so Julia can infer the
+    # closure return type (non-const module globals are type-unstable).
+    p_prof    = Larcform1_p(FT)
+    T_prof    = Larcform1_T(FT)
+    params_FT = TP.ThermodynamicsParameters(FT)
+    q_top     = FT(3E-6)
+    z_top     = FT(z_300hpa)
+    p_sfc     = FT(101300)  # surface pressure (Pa)
+    p_600hpa  = FT(60000)   # 600 hPa (Pa)
+    RH_sfc    = FT(0.8)     # RH at surface (Pithan 2016)
+    RH_free   = FT(0.2)     # RH at/above 600 hPa (Pithan 2016)
+    ZProfile(z -> begin
+        if z ≤ z_top
+            p_z = p_prof(z)
+            T_z = T_prof(z)
+            # Linear RH profile in pressure from 0.8 at surface to 0.2 at 600 hPa
+            RH = clamp(
+                RH_free + (RH_sfc - RH_free) * (p_z - p_600hpa) / (p_sfc - p_600hpa),
+                RH_free, RH_sfc,
+            )
+            # q_vap from RH over liquid (inlined for type stability)
+            p_vap_sat   = TD.saturation_vapor_pressure(params_FT, T_z, TD.Liquid())
+            p_vap       = RH * p_vap_sat
+            Rv_over_Rd  = TP.Rv_over_Rd(params_FT)
+            p_vap / Rv_over_Rd / (p_z - (1 - 1 / Rv_over_Rd) * p_vap)
+        else
+            q_top
+        end
+    end)
 end
 
 """ [pithan_2016]@cite """
 function Larcform1_RH(::Type{FT}) where {FT}
-    ts(z) = combined_thermo_state(z)
-    ZProfile(z -> FT(TD.relative_humidity(params, ts(z))))
+    p_prof    = Larcform1_p(FT)
+    T_prof    = Larcform1_T(FT)
+    params_FT = TP.ThermodynamicsParameters(FT)
+    z_top     = FT(z_300hpa)
+    ZProfile(z -> begin
+        q_tot = Larcform1_q_tot(FT)(z)
+        if z ≤ z_top
+            TD.relative_humidity(params_FT, T_prof(z), p_prof(z), q_tot, FT(0), FT(0))
+        else
+            FT(0.2)
+        end
+    end)
 end
 
 # Geostrophic wind
