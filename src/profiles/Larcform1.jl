@@ -29,7 +29,7 @@ function Larcform1_T(::Type{FT}) where {FT}
         T_0 - γ*z # K 
     else
         T_300hpa       # T_300hpa # K
-    end)               # kg/kg
+    end)               # K
 end
 
 # Pressure
@@ -59,14 +59,14 @@ end
 """
 RH profile for Larcform1 up to 300hPa. 
     
-Used to construct full thermodynamic state lin `conbined_thermo_state`.
+Used to construct full thermodynamic state in `combined_thermo_state`.
 
 """
 function Larcform1_RH_sfcto300hpa(::Type{FT}) where {FT}
     p_in = FT[0hPa, 600.0hPa, 1013.0hPa]
     RH_in = FT[0.2, 0.2, 0.8]
     prof = linear_interp(p_in, RH_in)
-    ZProfile(prof ∘ Larcform1_z(FT))
+    ZProfile(prof ∘ Larcform1_p(FT))
 end
 
 # Construct thermodynamic state for all z in domain
@@ -81,26 +81,19 @@ function Larcform1_q_tot(::Type{FT}) where {FT}
     # closure return type (non-const module globals are type-unstable).
     p_prof    = Larcform1_p(FT)
     T_prof    = Larcform1_T(FT)
+    RH_prof   = Larcform1_RH_sfcto300hpa(FT)  # z → RH (fixed: uses Larcform1_p(FT))
     params_FT = TP.ThermodynamicsParameters(FT)
     q_top     = FT(3E-6)
     z_top     = FT(z_300hpa)
-    p_sfc     = FT(101300)  # surface pressure (Pa)
-    p_600hpa  = FT(60000)   # 600 hPa (Pa)
-    RH_sfc    = FT(0.8)     # RH at surface (Pithan 2016)
-    RH_free   = FT(0.2)     # RH at/above 600 hPa (Pithan 2016)
     ZProfile(z -> begin
         if z ≤ z_top
             p_z = p_prof(z)
             T_z = T_prof(z)
-            # Linear RH profile in pressure from 0.8 at surface to 0.2 at 600 hPa
-            RH = clamp(
-                RH_free + (RH_sfc - RH_free) * (p_z - p_600hpa) / (p_sfc - p_600hpa),
-                RH_free, RH_sfc,
-            )
+            RH  = RH_prof(z)  # pass height z directly (Bug 3 fix)
             # q_vap from RH over liquid (inlined for type stability)
-            p_vap_sat   = TD.saturation_vapor_pressure(params_FT, T_z, TD.Liquid())
-            p_vap       = RH * p_vap_sat
-            Rv_over_Rd  = TP.Rv_over_Rd(params_FT)
+            p_vap_sat  = TD.saturation_vapor_pressure(params_FT, T_z, TD.Liquid())
+            p_vap      = RH * p_vap_sat
+            Rv_over_Rd = TP.Rv_over_Rd(params_FT)
             p_vap / Rv_over_Rd / (p_z - (1 - 1 / Rv_over_Rd) * p_vap)
         else
             q_top
@@ -115,9 +108,19 @@ function Larcform1_RH(::Type{FT}) where {FT}
     params_FT = TP.ThermodynamicsParameters(FT)
     z_top     = FT(z_300hpa)
     ZProfile(z -> begin
-        q_tot = Larcform1_q_tot(FT)(z)
         if z ≤ z_top
-            TD.relative_humidity(params_FT, T_prof(z), p_prof(z), q_tot, FT(0), FT(0))
+            p_z  = p_prof(z)
+            T_z  = T_prof(z)
+            q_tot = Larcform1_q_tot(FT)(z)
+            # Invert q_tot → p_vap using the exact specific-humidity formula,
+            # then divide by liquid saturation pressure to match Larcform1_q_tot
+            # (which defines q_tot from RH-over-liquid). Using mixed/ice saturation
+            # here would inflate RH at arctic temperatures (T << 273 K).
+            Rv_over_Rd = TP.Rv_over_Rd(params_FT)
+            ε          = 1 / Rv_over_Rd        # Rd/Rv ≈ 0.622
+            p_vap      = q_tot * p_z / (ε + q_tot * (1 - ε))
+            p_vap_sat  = TD.saturation_vapor_pressure(params_FT, T_z, TD.Liquid())
+            p_vap / p_vap_sat
         else
             FT(0.2)
         end
