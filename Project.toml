@@ -12,5 +12,5 @@ Thermodynamics = "b60c26fb-14c3-4610-9d3e-2d17fe7ff00c"
 [compat]
 ClimaParams = "1.0.10"
 Interpolations = "0.14, 0.15"
-Thermodynamics = "0.15.7"
+Thermodynamics = "1"
 julia = "1"
