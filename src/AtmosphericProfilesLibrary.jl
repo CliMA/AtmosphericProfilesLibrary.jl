@@ -49,4 +49,7 @@ include("profiles/SP.jl")
 include("profiles/DryBubble.jl")
 include("profiles/ISDAC.jl")
 
+# Idealized profiles
+include("profiles/Larcform1.jl")
+
 end # module
