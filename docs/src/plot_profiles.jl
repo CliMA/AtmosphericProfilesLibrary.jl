@@ -154,6 +154,7 @@ z_profiles = [
 
     (; func = APL.Larcform1_T             , kwargs = (;z_range = zr_hi, xlabel = "T")),
     (; func = APL.Larcform1_p             , kwargs = (;z_range = zr_hi, xlabel = "p")),
+    (; func = APL.Larcform1_RH            , kwargs = (;z_range = zr_hi, xlabel = "RH")),
     (; func = APL.Larcform1_geostrophic_u , kwargs = (;z_range = zr_hi, xlabel = "u")),
     (; func = APL.Larcform1_geostrophic_v , kwargs = (;z_range = zr_hi, xlabel = "v")),
 ]
