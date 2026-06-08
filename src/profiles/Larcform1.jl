@@ -11,6 +11,7 @@ module Larcform1_constants
     const R            = 287.0     # gas constant for air (J/kg/K)
     const g            = 9.81      # gravitational acceleration (m/s²)
     const P_tropopause = 30000.0   # tropopause pressure, 300 hPa (Pa)
+    const q_top        = 3e-6      # specific humidity above tropopause (kg/kg)
 
     # Derived constants
     const α            = R * γ / g  # exponent in hypsometric equation (Rγ/g)
@@ -39,3 +40,9 @@ Larcform1_geostrophic_u(::Type{FT}) where {FT} = ZProfile(z ->
 
 """ [Pithan2016](@cite) """
 Larcform1_geostrophic_v(::Type{FT}) where {FT} = ZProfile(z -> FT(0))
+
+""" [Pithan2016](@cite) """
+function Larcform1_RH(::Type{FT}) where {FT}
+    rh_of_p = linear_interp(FT[0, 60000, LC.P_0], FT[0.2, 0.2, 0.8])
+    ZProfile(rh_of_p ∘ Larcform1_p(FT))
+end
