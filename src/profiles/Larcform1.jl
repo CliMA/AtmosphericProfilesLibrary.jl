@@ -3,22 +3,22 @@
 # 2) atmospheric is well described as an ideal gas
 # 3) surface pressure is 1013hPa
 
-module Larcform1_constants
+const LC = let
     # Given constants — Pithan 2016, Table 1 and footnote a
-    const γ            = 8e-3      # lapse rate (K/m)
-    const T_0          = 273.0     # near-surface air temperature (K)
-    const P_0          = 101300.0  # surface pressure (Pa)
-    const R            = 287.0     # gas constant for air (J/kg/K)
-    const g            = 9.81      # gravitational acceleration (m/s²)
-    const P_tropopause = 30000.0   # tropopause pressure, 300 hPa (Pa)
-    const q_top        = 3e-6      # specific humidity above tropopause (kg/kg)
+    γ            = 8e-3      # lapse rate (K/m)
+    T_0          = 273.0     # near-surface air temperature (K)
+    P_0          = 101300.0  # surface pressure (Pa)
+    R            = 287.0     # gas constant for air (J/kg/K)
+    g            = 9.81      # gravitational acceleration (m/s²)
+    P_tropopause = 30000.0   # tropopause pressure, 300 hPa (Pa)
+    q_top        = 3e-6      # specific humidity above tropopause (kg/kg)
 
     # Derived constants
-    const α            = R * γ / g  # exponent in hypsometric equation (Rγ/g)
-    const z_tropopause = (T_0 / γ) * (1 - (P_tropopause / P_0)^α)   # hyposmetric equation for tropopause height (m)
-    const T_tropopause = T_0 - γ * z_tropopause                     # tropopause temperature (K)
+    α            = R * γ / g  # exponent in hypsometric equation (Rγ/g)
+    z_tropopause = (T_0 / γ) * (1 - (P_tropopause / P_0)^α)   # hyposmetric equation for tropopause height (m)
+    T_tropopause = T_0 - γ * z_tropopause                     # tropopause temperature (K)
+    (; γ, T_0, P_0, R, g, P_tropopause, q_top, α, z_tropopause, T_tropopause)
 end
-import .Larcform1_constants as LC
 
 """ [Pithan2016](@cite) """
 Larcform1_T(::Type{FT}) where {FT} = ZProfile(z -> if z ≤ LC.z_tropopause
