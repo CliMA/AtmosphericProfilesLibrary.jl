@@ -28,7 +28,7 @@ include("define_save_plots.jl")
 
 const zr_hi = range(0, stop = 2.5e4, length = 100);
 const zr_lo = range(0, stop = 4000.0, length = 100);
-const t_range = range(0, stop = 3600*15, length = 200);
+const t_range = range(0, stop = 3600 * 15, length = 200);
 
 #####
 ##### z-t profiles
