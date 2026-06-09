@@ -15,10 +15,11 @@ const LC = let
 
     # Derived constants
     α            = R * γ / g  # exponent in hypsometric equation (Rγ/g)
-    z_tropopause = (T_0 / γ) * (1 - (P_tropopause / P_0)^α)   # hyposmetric equation for tropopause height (m)
+    z_tropopause = (T_0 / γ) * (1 - (P_tropopause / P_0)^α)   # hypsometric equation for tropopause height (m)
     T_tropopause = T_0 - γ * z_tropopause                     # tropopause temperature (K)
     (; γ, T_0, P_0, R, g, P_tropopause, q_top, α, z_tropopause, T_tropopause)
 end
+const Larcform1_constants = LC
 
 """ [Pithan2016](@cite) """
 Larcform1_T(::Type{FT}) where {FT} = ZProfile(z -> FT(if z ≤ LC.z_tropopause
@@ -39,7 +40,7 @@ Larcform1_geostrophic_u(::Type{FT}) where {FT} = ZProfile(z ->
     z ≤ LC.z_tropopause ? FT(5) : FT(0))
 
 """ [Pithan2016](@cite) """
-Larcform1_geostrophic_v(::Type{FT}) where {FT} = ZProfile(z -> FT(0))
+Larcform1_geostrophic_v(::Type{FT}) where {FT} = ZProfile(Returns(FT(0)))
 
 """ [Pithan2016](@cite) """
 function Larcform1_RH(::Type{FT}) where {FT}
