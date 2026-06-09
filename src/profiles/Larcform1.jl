@@ -21,11 +21,11 @@ const LC = let
 end
 
 """ [Pithan2016](@cite) """
-Larcform1_T(::Type{FT}) where {FT} = ZProfile(z -> if z ≤ LC.z_tropopause
-    FT(LC.T_0) - FT(LC.γ) * z
+Larcform1_T(::Type{FT}) where {FT} = ZProfile(z -> FT(if z ≤ LC.z_tropopause
+    LC.T_0 - LC.γ * z
 else
-    FT(LC.T_tropopause)
-end)
+    LC.T_tropopause
+end))
 
 """ [Pithan2016](@cite) """
 Larcform1_p(::Type{FT}) where {FT} = ZProfile(z -> if z ≤ LC.z_tropopause
