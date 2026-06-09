@@ -4,33 +4,33 @@ import Interpolations as Intp
 
 abstract type AbstractProfile end
 struct TimeProfile{P} <: AbstractProfile
-  prof::P
+    prof::P
 end
 @inline (prof::TimeProfile)(t) = prof.prof(t)
 
 struct TimeZProfile{P} <: AbstractProfile
-  prof::P
+    prof::P
 end
 @inline (prof::TimeZProfile)(t, z) = prof.prof(t, z)
 
 struct ZProfile{P} <: AbstractProfile
-  prof::P
+    prof::P
 end
 @inline (prof::ZProfile)(z) = prof.prof(z)
 
 struct ΠTimeZProfile{P} <: AbstractProfile
-  prof::P
+    prof::P
 end
 @inline (prof::ΠTimeZProfile)(Π, t, z) = prof.prof(Π, t, z)
 
 struct ΠZProfile{P} <: AbstractProfile
-  prof::P
+    prof::P
 end
 @inline (prof::ΠZProfile)(Π, z) = prof.prof(Π, z)
 
 @inline function linear_interp(z, x)
-  _interp = Intp.interpolate((z, ), x, Intp.Gridded(Intp.Linear()))
-  return Intp.extrapolate(_interp, Intp.Flat())
+    _interp = Intp.interpolate((z,), x, Intp.Gridded(Intp.Linear()))
+    return Intp.extrapolate(_interp, Intp.Flat())
 end
 
 # Large data-based profiles
@@ -48,5 +48,8 @@ include("profiles/GABLS.jl")
 include("profiles/SP.jl")
 include("profiles/DryBubble.jl")
 include("profiles/ISDAC.jl")
+
+# Idealized profiles
+include("profiles/Larcform1.jl")
 
 end # module
