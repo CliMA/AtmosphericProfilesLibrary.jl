@@ -152,11 +152,11 @@ z_profiles = [
     (; func = APL.ISDAC_inv_τ_scalar    , kwargs = (;z_range = zr_lo, xlabel = "inv_τ_scalar", unit = "[1/s]")),
     (; func = APL.ISDAC_inv_τ_wind      , kwargs = (;z_range = zr_lo, xlabel = "inv_τ_wind", unit = "[1/s]")),
 
-    (; func = APL.Larcform1_T             , kwargs = (;z_range = zr_hi, xlabel = "T")),
-    (; func = APL.Larcform1_p             , kwargs = (;z_range = zr_hi, xlabel = "p")),
-    (; func = APL.Larcform1_RH            , kwargs = (;z_range = zr_hi, xlabel = "RH")),
-    (; func = APL.Larcform1_geostrophic_u , kwargs = (;z_range = zr_hi, xlabel = "u")),
-    (; func = APL.Larcform1_geostrophic_v , kwargs = (;z_range = zr_hi, xlabel = "v")),
+    (; func = APL.Larcform1_T             , kwargs = (;z_range = zr_hi, xlabel = "T",  unit = "[K]")),
+    (; func = APL.Larcform1_p             , kwargs = (;z_range = zr_hi, xlabel = "p",  unit = "[Pa]")),
+    (; func = APL.Larcform1_RH            , kwargs = (;z_range = zr_hi, xlabel = "RH", unit = "[-]")),
+    (; func = APL.Larcform1_geostrophic_u , kwargs = (;z_range = zr_hi, xlabel = "u",  unit = "[m/s]")),
+    (; func = APL.Larcform1_geostrophic_v , kwargs = (;z_range = zr_hi, xlabel = "v",  unit = "[m/s]")),
 ]
 
 #####
