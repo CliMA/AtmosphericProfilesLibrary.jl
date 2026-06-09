@@ -28,11 +28,11 @@ else
 end))
 
 """ [Pithan2016](@cite) """
-Larcform1_p(::Type{FT}) where {FT} = ZProfile(z -> if z ≤ LC.z_tropopause
-    FT(LC.P_0) * (1 - LC.γ / LC.T_0 * z)^(1 / LC.α)
+Larcform1_p(::Type{FT}) where {FT} = ZProfile(z -> FT(if z ≤ LC.z_tropopause
+    LC.P_0 * (1 - LC.γ / LC.T_0 * z)^(1 / LC.α)
 else
-    FT(LC.P_tropopause) * exp(-LC.g / (LC.R * LC.T_tropopause) * (z - LC.z_tropopause))
-end)
+    LC.P_tropopause * exp(-LC.g / (LC.R * LC.T_tropopause) * (z - LC.z_tropopause))
+end))
 
 """ [Pithan2016](@cite) """
 Larcform1_geostrophic_u(::Type{FT}) where {FT} = ZProfile(z ->
