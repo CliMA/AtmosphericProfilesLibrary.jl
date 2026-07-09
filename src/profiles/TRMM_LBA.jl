@@ -1,5 +1,3 @@
-import LinearAlgebra
-
 """ [Grabowski2006](@cite) """
 function TRMM_LBA_z(::Type{FT}) where {FT}
     z_in = FT[0.130,  0.464,  0.573,  1.100,  1.653,  2.216,  2.760,
@@ -111,7 +109,7 @@ end
 
 """ [Grabowski2006](@cite) """
 function TRMM_LBA_radiation(::Type{FT}) where {FT}
-    rad_time = range(FT(10), FT(360); length = 36) .* 60
+    t_in = collect(range(FT(10), FT(360); length = 36) .* 60)
     z_in = FT[42.5, 200.92, 456.28, 743, 1061.08, 1410.52, 1791.32, 2203.48, 2647,3121.88, 3628.12,
               4165.72, 4734.68, 5335, 5966.68, 6629.72, 7324.12,
               8049.88, 8807, 9595.48, 10415.32, 11266.52, 12149.08, 13063, 14008.28,
@@ -227,8 +225,7 @@ function TRMM_LBA_radiation(::Type{FT}) where {FT}
 
     rad_in = reduce(hcat, rad_in)::Matrix{FT}
     rad_in .= rad_in ./ 86400
-    rad_in = (rad_in')::LinearAlgebra.Adjoint{FT, Matrix{FT}}
-    interp = Intp.interpolate((rad_time, z_in), rad_in, (Intp.Gridded(Intp.Linear()), Intp.Gridded(Intp.Linear())))
-    profile = Intp.extrapolate(interp, Intp.Flat())
+    rad_in = Matrix(rad_in')
+    profile = bilinear_interp(t_in, z_in, rad_in)
     return TimeZProfile(profile)
 end
