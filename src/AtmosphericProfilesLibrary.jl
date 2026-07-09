@@ -1,6 +1,8 @@
 module AtmosphericProfilesLibrary
 
+import ClimaInterpolations.Interpolation1D as CI1D
 import Interpolations as Intp
+import StaticArrays: SVector
 
 abstract type AbstractProfile end
 struct TimeProfile{P} <: AbstractProfile
@@ -28,9 +30,25 @@ struct ΠZProfile{P} <: AbstractProfile
 end
 @inline (prof::ΠZProfile)(Π, z) = prof.prof(Π, z)
 
+struct LinearInterpolation{I}
+    itp::I
+end
+
+@inline (li::LinearInterpolation)(z) = li.itp(convert(eltype(li.itp.xsource), z))
+
 @inline function linear_interp(z, x)
-    _interp = Intp.interpolate((z,), x, Intp.Gridded(Intp.Linear()))
-    return Intp.extrapolate(_interp, Intp.Flat())
+    @assert length(z) == length(x)
+    N = length(z)
+    T = promote_type(eltype(z), eltype(x))
+    xsource = SVector{N,T}(z)
+    fsource = SVector{N,T}(x)
+    itp = CI1D.Interpolate1D(
+        xsource,
+        fsource;
+        interpolationorder = CI1D.Linear(),
+        extrapolationorder = CI1D.Flat(),
+    )
+    return LinearInterpolation(itp)
 end
 
 # Large data-based profiles
