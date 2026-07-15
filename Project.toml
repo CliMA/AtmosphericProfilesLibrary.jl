@@ -1,7 +1,7 @@
 name = "AtmosphericProfilesLibrary"
 uuid = "86bc3604-9858-485a-bdbe-831ec50de11d"
 authors = ["Climate Modeling Alliance"]
-version = "0.1.9"
+version = "0.1.10"
 
 [deps]
 ClimaInterpolations = "dd0f122e-fa3b-47f3-bcf0-93bbc60d885e"
