@@ -38,3 +38,11 @@ include("profiles.jl")
         test_profile(Float32, prof, name)
     end
 end
+
+@testset "isbits profiles" begin
+    for FT in (Float32, Float64)
+        for (name, prof) in profiles(FT)
+            @test isbits(prof.prof)
+        end
+    end
+end
